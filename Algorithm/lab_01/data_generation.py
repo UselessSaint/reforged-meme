@@ -3,9 +3,10 @@ import numpy as np
 
 
 def f(x):
-    return x*x*x - 1
+    # return x*x*x - 1
     # return math.cos(math.pi/2*x)
-
+    return math.cos(x) - x
+    # return math.cos(x)**3 - 3*math.sin(4*x)**2
 
 def generate_data():
     file = open("data.txt", "w")

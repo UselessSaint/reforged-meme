@@ -51,9 +51,9 @@ def find_div_diff(input_data, lower_edge, upped_edge):
             tmp = input_data[i + j + lower_edge][0] - input_data[j + lower_edge][0]
             # print(tmp)
             if tmp == 0:
-                # div_diff[i].append(0.0)
-                # continue
-                tmp = 1e-10
+                div_diff[i].append(0.0)
+                continue
+                #tmp = 1e-10
             div_diff[i].append((div_diff[i - 1][j + 1] - div_diff[i - 1][j])/(tmp))
 
     # [print(div_diff[i]) for i in range(len(div_diff))]
@@ -127,6 +127,8 @@ def main():
             print("Степень должна быть натуральным числом.")
             print("Значение должно быть вещественным числом.")
 
+    input_data.sort()
+
     value = interpolate(x, n, input_data)
 
     print("Результат работы: {:f}\nИстинное значение: {:f}".format(value, f(x)))
@@ -144,8 +146,8 @@ def main():
     # print(root_data)
 
     root = interpolate(0, n, root_data)
-
     print("Корень: ", root)
+    print("Значение в найденном корне: ", f(root))
 
 
 if __name__ == "__main__":
