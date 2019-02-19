@@ -131,7 +131,7 @@ def main():
 
     value = interpolate(x, n, input_data)
 
-    print("Результат работы: {:f}\nИстинное значение: {:f}".format(value, f(x)))
+    print("Результат работы: {:.3f}\nИстинное значение: {:.3f}".format(value, f(x)))
 
     # root_data = [[i[1],i[0]] for i in input_data]
     # print(input_data)
@@ -142,12 +142,12 @@ def main():
     for i in range(len(input_data)):
         root_data.append([input_data[i][1],input_data[i][0]])
 
-    # root_data.sort()
+    root_data.sort()
     # print(root_data)
 
     root = interpolate(0, n, root_data)
-    print("Корень: ", root)
-    print("Значение в найденном корне: ", f(root))
+    print("Корень: %.3f" % root)
+    print("Значение в найденном корне: %.3f" % f(root))
 
 
 if __name__ == "__main__":
