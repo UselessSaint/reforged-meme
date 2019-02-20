@@ -34,7 +34,8 @@ class GUI(Tk):
         self.__create_coordinates_entry()
         self.__create_listbox()
         self.__create_listbox_editor()
-        self.__create_matplot_window()
+        # self.__create_matplot_window()
+        # self.__create_calculation_button()
 
     def __create_coordinates_entry(self):
         coordinates_frame = Frame(self)
@@ -137,15 +138,31 @@ class GUI(Tk):
             selected = selected[0]
             self.coordinates_listbox.delete(selected)
 
-    def __create_matplot_window(self):
-        # self.figure = Figure()
-        # a = self.figure.add_subplot(111)
-        # a.plot([1,2])
-        #
-        # canvas = FigureCanvasTkAgg(self.figure, self)
-        # canvas.draw()
-        # canvas.get_tk_widget().grid(row = 0, column = 1, rowspan = 3)
-        pass
+    # def __create_calculation_button(self):
+    #     calc_button = Frame(self)
+    #     calc_button.grid(row = 3, column = 0)
+    #
+    #     calc_button = Button(calc_button, text="Вычислить",
+    #                          command=self.__calculate)
+    #     calc_button.pack()
+    #
+    # def __calculate(self):
+    #     self.to_draw.plot([1,2,3,4,5,6,100,8,9])
+    #     self.canvas.draw()
+    #
+    # def __create_matplot_window(self):
+    #     self.figure = Figure(dpi=100, facecolor="grey")
+    #
+    #     self.canvas = FigureCanvasTkAgg(self.figure, self)
+    #     self.canvas.draw()
+    #     self.canvas.get_tk_widget().grid(row = 0, column = 1, rowspan = 3)
+    #
+    #     self.to_draw = self.figure.add_subplot(111)
+    #
+    #     # toolbar = NavigationToolbar2Tk(canvas, self)
+    #     # toolbar.update()
+    #     # canvas._tkcanvas.pack(side = tk.BOTTOM)
+    #     # Тулбар тут не работает (Не знаю нужен ли он)
 
 def main():
     gui = GUI()
