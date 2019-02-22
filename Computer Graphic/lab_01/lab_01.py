@@ -4,37 +4,51 @@ from tkinter import messagebox as mb
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg#, \
   #  NavigationToolbar2Tk
 from matplotlib.figure import Figure
-
-
-
+import math
 import numpy as np
 
-def vector_len():
-    pass
+def calcucalte_sq_diff(points):
+    print(points)
+    first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
+    seconds_vec_len = math.sqrt((points[1][0]-points[2][0])**2 + (points[1][1]-points[2][1])**2)
+    third_vec_len = math.sqrt((points[2][0]-points[0][0])**2 + (points[2][1]-points[0][1])**2)
 
-def calcucalte_sq_diff(triangle_points):
-    pass
+    half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
+
+    triagle_sq = math.sqrt(half_per*(half_per - first_vec_len)*
+                           (half_per - seconds_vec_len)*
+                           (half_per - third_vec_len))
+    incircle_sq = (triagle_sq / half_per)**2 * math.pi
+
+    print(triagle_sq, incircle_sq)
+    return abs(triagle_sq - incircle_sq)
 
 def find_triangle(points):
-    # min_sq_diff = calcucalte_sq_diff([points[i] for i in range(3)])
-    #
-    # amount_of_point = len(points)
-    #
-    # for i in range(amount_of_point - 2):
-    #     for j in range(i + 1, amount_of_point - 1):
-    #         for k in range(k + 1, amount_of_point):
-    #             curr_sq_diff = calcucalte_sq_diff([points[i], points[j], points[k]])
-    #             if curr_sq_diff < min_sq_diff:
-    #                 min_sq_diff = curr_sq_diff
-    #
-    #                 result = [points[i], points[j], points[k]]
+    min_sq_diff = calcucalte_sq_diff([points[i] for i in range(3)])
+    result = [points[i] for i in range(3)]
+
+    amount_of_point = len(points)
+
+    for i in range(amount_of_point - 2):
+        for j in range(i + 1, amount_of_point - 1):
+            for k in range(j + 1, amount_of_point):
+                curr_sq_diff = calcucalte_sq_diff([points[i], points[j], points[k]])
+                print(curr_sq_diff, min_sq_diff)
+                if curr_sq_diff < min_sq_diff:
+                    min_sq_diff = curr_sq_diff
+                    result = [points[i], points[j], points[k]]
+
+    # Сделать проверку на вырожденность!!!
 
     # a = [float(input("1: ")), float(input("1: "))]
     # b = [float(input("2: ")), float(input("2: "))]
     # c = [float(input("3: ")), float(input("3: "))]
-
+    #
     # result = [a,b,c]
-    pass
+    #
+    # print(calcucalte_sq_diff(result))
+    # pass
+    print(result)
     return result
 
 def coordinates_validation(x, y):
@@ -155,7 +169,7 @@ class GUI(Tk):
                 current_y = float(current_y)
 
                 self.coordinates_listbox.delete(selected)
-                self.coordinates_listbox.insert(selected, "(%.3f, %.3f)" % (current_x, current_y))
+                self.coordinates_listbox.insert(selected, [round(current_x, 3), round(current_y, 3)])
             else:
                 mb.showerror("Ошибка", "Координаты должны быть вещественными числами.")
 
@@ -211,11 +225,6 @@ class GUI(Tk):
         self.canvas.get_tk_widget().grid(row = 0, column = 1, rowspan = 3)
 
         self.to_draw = self.figure.add_subplot(111)
-    #
-    #     # toolbar = NavigationToolbar2Tk(canvas, self)
-    #     # toolbar.update()
-    #     # canvas._tkcanvas.pack(side = tk.BOTTOM)
-    #     # Тулбар тут не работает (Не знаю нужен ли он)
 
 def main():
     gui = GUI()
