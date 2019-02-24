@@ -1,26 +1,51 @@
 from tkinter import *
 from tkinter import messagebox as mb
-# import matplotlib as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg#, \
-  #  NavigationToolbar2Tk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import math
-import numpy as np
 
-def calcucalte_sq_diff(points):
-    print(points)
+def find_base_cir(points):
     first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
     seconds_vec_len = math.sqrt((points[1][0]-points[2][0])**2 + (points[1][1]-points[2][1])**2)
     third_vec_len = math.sqrt((points[2][0]-points[0][0])**2 + (points[2][1]-points[0][1])**2)
 
     half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
 
-    triagle_sq = math.sqrt(half_per*(half_per - first_vec_len)*
-                           (half_per - seconds_vec_len)*
-                           (half_per - third_vec_len))
+    triagle_sq = math.sqrt(half_per*
+                           round((half_per - first_vec_len), 3)*
+                           round((half_per - seconds_vec_len), 3)*
+                           round((half_per - third_vec_len), 3))
+    cir_radius = triagle_sq / half_per
+
+    cir_x = (seconds_vec_len * points[0][0] +
+             third_vec_len * points[1][0] +
+             first_vec_len * points[2][0])
+    cir_x /= (first_vec_len + seconds_vec_len + third_vec_len)
+
+    cir_y = (seconds_vec_len * points[0][1] +
+             third_vec_len * points[1][1] +
+             first_vec_len * points[2][1])
+    cir_y /= (first_vec_len + seconds_vec_len + third_vec_len)
+
+    cir_cen = (cir_x, cir_y)
+
+    return cir_radius, cir_cen
+
+def calcucalte_sq_diff(points):
+    first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
+    seconds_vec_len = math.sqrt((points[1][0]-points[2][0])**2 + (points[1][1]-points[2][1])**2)
+    third_vec_len = math.sqrt((points[2][0]-points[0][0])**2 + (points[2][1]-points[0][1])**2)
+
+    half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
+
+    triagle_sq = math.sqrt(half_per*
+                           round((half_per - first_vec_len), 3)*
+                           round((half_per - seconds_vec_len), 3)*
+                           round((half_per - third_vec_len), 3))
+
     incircle_sq = (triagle_sq / half_per)**2 * math.pi
 
-    print(triagle_sq, incircle_sq)
     return abs(triagle_sq - incircle_sq)
 
 def find_triangle(points):
@@ -29,26 +54,22 @@ def find_triangle(points):
 
     amount_of_point = len(points)
 
+    # возможно тут ошибка в переборе треугольников
+
     for i in range(amount_of_point - 2):
         for j in range(i + 1, amount_of_point - 1):
             for k in range(j + 1, amount_of_point):
                 curr_sq_diff = calcucalte_sq_diff([points[i], points[j], points[k]])
-                print(curr_sq_diff, min_sq_diff)
+                if curr_sq_diff == 0:
+                    continue
+                # print(curr_sq_diff, min_sq_diff)
                 if curr_sq_diff < min_sq_diff:
                     min_sq_diff = curr_sq_diff
                     result = [points[i], points[j], points[k]]
 
-    # Сделать проверку на вырожденность!!!
+    if curr_sq_diff == 0:
+        result = ()
 
-    # a = [float(input("1: ")), float(input("1: "))]
-    # b = [float(input("2: ")), float(input("2: "))]
-    # c = [float(input("3: ")), float(input("3: "))]
-    #
-    # result = [a,b,c]
-    #
-    # print(calcucalte_sq_diff(result))
-    # pass
-    print(result)
     return result
 
 def coordinates_validation(x, y):
@@ -64,7 +85,7 @@ def coordinates_validation(x, y):
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("800x600")
+        self.geometry("660x600")
 
         self.coordinates_frame = None
         self.x_entry = None
@@ -150,6 +171,10 @@ class GUI(Tk):
         delete_coordinates_button = Button(editor_frame, text="Удалить точку",
                                            command=self.__delete_coordinates)
 
+        clear_button = Button(editor_frame, text="Очистить",
+                                command=self.__clear)
+
+        clear_button.grid(row=3, column=0, columnspan=4)
         edit_coordinates_button.grid(row=1, column=0, columnspan=4)
         delete_coordinates_button.grid(row=2, column=0, columnspan=4)
 
@@ -187,44 +212,60 @@ class GUI(Tk):
 
     def __create_calculation_button(self):
         calc_button = Frame(self)
-        calc_button.grid(row = 3, column = 0)
+        calc_button.grid(row = 3, column = 0, pady=15)
 
         calc_button = Button(calc_button, text="Вычислить",
                              command=self.__calculate)
         calc_button.pack()
+
+    def __clear(self):
+        self.coordinates_listbox.delete(0, END)
 
     def __calculate(self):
         points = self.coordinates_listbox.get(0, END)
 
         if (len(points) < 3):
             mb.showerror("Ошибка", "Необходимо минимум 3 точки")
+        else:
+            result = find_triangle(points)
+            print(result)
+            if len(result) == 0:
+                mb.showerror("Ошибка", "Не существует ни одного невырожденного треугольника")
+            else:
+                cir_rad, cir_center = find_base_cir(result)
+                self.__draw_triange(result, cir_center, cir_rad)
 
-        result = find_triangle(points)
-
-        self.__draw_triange(result)
-
-    def __draw_triange(self, points):
+    def __draw_triange(self, points, cir_center, cir_rad):
         self.to_draw.clear()
 
         self.to_draw.plot([points[0][0], points[1][0]],
                           [points[0][1], points[1][1]], color = "blue")
+        self.to_draw.text(points[0][0], points[0][1], "(%.2f, %.2f)"%(points[0][0], points[0][1]), color = "red")
 
         self.to_draw.plot([points[1][0], points[2][0]],
                           [points[1][1], points[2][1]], color = "blue")
+        self.to_draw.text(points[1][0], points[1][1], "(%.2f, %.2f)"%(points[1][0], points[1][1]), color = "red")
 
         self.to_draw.plot([points[2][0], points[0][0]],
                           [points[2][1], points[0][1]], color = "blue")
+        self.to_draw.text(points[2][0], points[2][1], "(%.2f, %.2f)"%(points[2][0], points[2][1]), color = "red")
+
+        circle = plt.Circle(cir_center, cir_rad, fill=False)
+
+        self.to_draw.add_patch(circle)
 
         self.canvas.draw()
 
     def __create_matplot_window(self):
-        self.figure = Figure(dpi=100, facecolor="grey")
+        self.figure = Figure(dpi=100, facecolor="grey", figsize=(5,5))
 
         self.canvas = FigureCanvasTkAgg(self.figure, self)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row = 0, column = 1, rowspan = 3)
 
-        self.to_draw = self.figure.add_subplot(111)
+        self.to_draw = self.figure.add_subplot(1, 1, 1)
+
+    # def __create_la
 
 def main():
     gui = GUI()
