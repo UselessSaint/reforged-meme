@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter import messagebox as mb
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 import math
+
 
 def find_base_cir(points):
     first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
@@ -12,9 +10,9 @@ def find_base_cir(points):
 
     half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
 
-    triagle_sq = math.sqrt(half_per*
-                           round((half_per - first_vec_len), 3)*
-                           round((half_per - seconds_vec_len), 3)*
+    triagle_sq = math.sqrt(half_per *
+                           round((half_per - first_vec_len), 3) *
+                           round((half_per - seconds_vec_len), 3) *
                            round((half_per - third_vec_len), 3))
     cir_radius = triagle_sq / half_per
 
@@ -32,6 +30,7 @@ def find_base_cir(points):
 
     return cir_radius, cir_cen
 
+
 def calcucalte_sq_diff(points):
     first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
     seconds_vec_len = math.sqrt((points[1][0]-points[2][0])**2 + (points[1][1]-points[2][1])**2)
@@ -39,14 +38,15 @@ def calcucalte_sq_diff(points):
 
     half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
 
-    triagle_sq = math.sqrt(half_per*
-                           round((half_per - first_vec_len), 3)*
-                           round((half_per - seconds_vec_len), 3)*
+    triagle_sq = math.sqrt(half_per *
+                           round((half_per - first_vec_len), 3) *
+                           round((half_per - seconds_vec_len), 3) *
                            round((half_per - third_vec_len), 3))
 
     incircle_sq = (triagle_sq / half_per)**2 * math.pi
 
     return abs(triagle_sq - incircle_sq)
+
 
 def find_triangle(points):
     min_sq_diff = calcucalte_sq_diff([points[i] for i in range(3)])
@@ -62,15 +62,15 @@ def find_triangle(points):
                 curr_sq_diff = calcucalte_sq_diff([points[i], points[j], points[k]])
                 if curr_sq_diff == 0:
                     continue
-                # print(curr_sq_diff, min_sq_diff)
                 if curr_sq_diff < min_sq_diff:
                     min_sq_diff = curr_sq_diff
                     result = [points[i], points[j], points[k]]
 
-    if curr_sq_diff == 0:
+    if min_sq_diff == 0:
         result = ()
 
     return result
+
 
 def coordinates_validation(x, y):
     try:
@@ -85,7 +85,8 @@ def coordinates_validation(x, y):
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("660x600")
+        self.geometry("690x600")
+        self.resizable(False, False)
 
         self.coordinates_frame = None
         self.x_entry = None
@@ -95,13 +96,15 @@ class GUI(Tk):
         self.y_edited = None
 
         self.figure = None
+        self.tkcanvas = None
+        self.tkcanvas_wh = 500
 
         self.coordinates_listbox = None
 
         self.__create_coordinates_entry()
         self.__create_listbox()
         self.__create_listbox_editor()
-        self.__create_matplot_window()
+        self.__create_canvas_window()
         self.__create_calculation_button()
 
     def __create_coordinates_entry(self):
@@ -143,7 +146,6 @@ class GUI(Tk):
         if coordinates_validation(current_x, current_y):
             current_x = float(current_x)
             current_y = float(current_y)
-            # self.coordinates_listbox.insert(0, "(%.3f, %.3f)" % (current_x, current_y))
             self.coordinates_listbox.insert(0, [round(current_x, 3), round(current_y, 3)])
         else:
             mb.showerror("Ошибка", "Координаты должны быть вещественными числами.")
@@ -171,8 +173,7 @@ class GUI(Tk):
         delete_coordinates_button = Button(editor_frame, text="Удалить точку",
                                            command=self.__delete_coordinates)
 
-        clear_button = Button(editor_frame, text="Очистить",
-                                command=self.__clear)
+        clear_button = Button(editor_frame, text="Очистить", command=self.__clear)
 
         clear_button.grid(row=3, column=0, columnspan=4)
         edit_coordinates_button.grid(row=1, column=0, columnspan=4)
@@ -212,7 +213,7 @@ class GUI(Tk):
 
     def __create_calculation_button(self):
         calc_button = Frame(self)
-        calc_button.grid(row = 3, column = 0, pady=15)
+        calc_button.grid(row=3, column=0, pady=15)
 
         calc_button = Button(calc_button, text="Вычислить",
                              command=self.__calculate)
@@ -224,7 +225,7 @@ class GUI(Tk):
     def __calculate(self):
         points = self.coordinates_listbox.get(0, END)
 
-        if (len(points) < 3):
+        if len(points) < 3:
             mb.showerror("Ошибка", "Необходимо минимум 3 точки")
         else:
             result = find_triangle(points)
@@ -233,44 +234,82 @@ class GUI(Tk):
                 mb.showerror("Ошибка", "Не существует ни одного невырожденного треугольника")
             else:
                 cir_rad, cir_center = find_base_cir(result)
-                self.__draw_triange(result, cir_center, cir_rad)
+                self.__draw_result(result, cir_center, cir_rad)
 
-    def __draw_triange(self, points, cir_center, cir_rad):
-        self.to_draw.clear()
+    def __draw_axes(self):
+        # self.tkcanvas.create_line(10, 10+self.tkcanvas_wh,
+        #                           10, 10,
+        #                           width=2, arrow=LAST)
+        # self.tkcanvas.create_line(10, 10+self.tkcanvas_wh,
+        #                           10+self.tkcanvas_wh, 10+self.tkcanvas_wh,
+        #                           width=2, arrow=LAST)
+        pass
 
-        self.to_draw.plot([points[0][0], points[1][0]],
-                          [points[0][1], points[1][1]], color = "blue")
-        self.to_draw.text(points[0][0], points[0][1], "(%.2f, %.2f)"%(points[0][0], points[0][1]), color = "red")
+# Просто добавь переменную бордера
+# И дальше не так сильно хардкодь, + придумай как сдвигать если там отрицалочка будет
+# И оси еще по красивому строй, давай еба, у тебя один день остался
 
-        self.to_draw.plot([points[1][0], points[2][0]],
-                          [points[1][1], points[2][1]], color = "blue")
-        self.to_draw.text(points[1][0], points[1][1], "(%.2f, %.2f)"%(points[1][0], points[1][1]), color = "red")
+    def __create_canvas_window(self):
+        canvas_frame = Frame(self, bg='grey')
 
-        self.to_draw.plot([points[2][0], points[0][0]],
-                          [points[2][1], points[0][1]], color = "blue")
-        self.to_draw.text(points[2][0], points[2][1], "(%.2f, %.2f)"%(points[2][0], points[2][1]), color = "red")
+        self.tkcanvas = Canvas(canvas_frame, width=self.tkcanvas_wh+10, height=self.tkcanvas_wh+10)
 
-        circle = plt.Circle(cir_center, cir_rad, fill=False)
+        canvas_frame.grid(row=0, column=1, rowspan=3)
+        self.tkcanvas.grid(row=0, column=0, padx=10, pady=10)
 
-        self.to_draw.add_patch(circle)
+        self.__draw_axes()
 
-        self.canvas.draw()
+    def __get_scale(self, result):
+        k = None
 
-    def __create_matplot_window(self):
-        self.figure = Figure(dpi=100, facecolor="grey", figsize=(5,5))
+        min_x = min([result[i][0] for i in range(len(result))])
+        max_x = max([result[i][0] for i in range(len(result))])
+        min_y = min([result[i][1] for i in range(len(result))])
+        max_y = max([result[i][1] for i in range(len(result))])
 
-        self.canvas = FigureCanvasTkAgg(self.figure, self)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row = 0, column = 1, rowspan = 3)
+        k_x = self.tkcanvas_wh / (max_x - min_x)
+        k_y = self.tkcanvas_wh / (max_y - min_y)
 
-        self.to_draw = self.figure.add_subplot(1, 1, 1)
+        if k_x >= 1 and k_y >= 1:
+            k = min(k_x, k_y)
+        elif k_x < 1 and k_y >= 1:
+            k = k_x
+        elif k_x >= 1 and k_y < 1:
+            k = k_y
+        elif k_x < 1 and k_y < 1:
+            k = min(k_x, k_y)
 
-    # def __create_la
+        return k
+
+    def __draw_result(self, result, cir_center, cir_rad):
+        self.tkcanvas.delete("all")
+        self.__draw_axes()
+
+        k = self.__get_scale(result)
+        print(k)
+        self.tkcanvas.create_line(10+result[0][0] * k, 10+self.tkcanvas_wh - result[0][1] * k,
+                                  10+result[1][0] * k, 10+self.tkcanvas_wh - result[1][1] * k,
+                                  fill='red')
+
+        self.tkcanvas.create_line(10+result[1][0] * k, 10+self.tkcanvas_wh - result[1][1] * k,
+                                  10+result[2][0] * k, 10+self.tkcanvas_wh - result[2][1] * k,
+                                  fill='red')
+
+        self.tkcanvas.create_line(10+result[2][0] * k, 10+self.tkcanvas_wh - result[2][1] * k,
+                                  10+result[0][0] * k, 10+self.tkcanvas_wh - result[0][1] * k,
+                                  fill='red')
+
+        self.tkcanvas.create_oval(10+(cir_center[0] - cir_rad) * k,
+                                  10+self.tkcanvas_wh - (cir_center[1] + cir_rad) * k,
+                                  10+(cir_center[0] + cir_rad) * k,
+                                  10+self.tkcanvas_wh - (cir_center[1] - cir_rad) * k)
+
+
+
 
 def main():
     gui = GUI()
     gui.mainloop()
-
 
 if __name__ == "__main__":
     main()
