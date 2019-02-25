@@ -49,9 +49,8 @@ def calcucalte_sq_diff(points):
 
 
 def find_triangle(points):
-    min_sq_diff = calcucalte_sq_diff([points[i] for i in range(3)])
-    result = [points[i] for i in range(3)]
-
+    result = ()
+    min_sq_diff = 0
     amount_of_point = len(points)
 
     # возможно тут ошибка в переборе треугольников
@@ -60,9 +59,13 @@ def find_triangle(points):
         for j in range(i + 1, amount_of_point - 1):
             for k in range(j + 1, amount_of_point):
                 curr_sq_diff = calcucalte_sq_diff([points[i], points[j], points[k]])
+                print(curr_sq_diff)
                 if curr_sq_diff == 0:
                     continue
-                if curr_sq_diff < min_sq_diff:
+                if min_sq_diff == 0:
+                    min_sq_diff = curr_sq_diff
+                    result = [points[i], points[j], points[k]]
+                elif curr_sq_diff < min_sq_diff:
                     min_sq_diff = curr_sq_diff
                     result = [points[i], points[j], points[k]]
 
@@ -85,7 +88,9 @@ def coordinates_validation(x, y):
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("690x600")
+        self.border = 27
+
+        self.geometry("727x610")
         self.resizable(False, False)
 
         self.coordinates_frame = None
@@ -236,14 +241,14 @@ class GUI(Tk):
                 cir_rad, cir_center = find_base_cir(result)
                 self.__draw_result(result, cir_center, cir_rad)
 
-    def __draw_axes(self):
-        # self.tkcanvas.create_line(10, 10+self.tkcanvas_wh,
-        #                           10, 10,
-        #                           width=2, arrow=LAST)
-        # self.tkcanvas.create_line(10, 10+self.tkcanvas_wh,
-        #                           10+self.tkcanvas_wh, 10+self.tkcanvas_wh,
-        #                           width=2, arrow=LAST)
+    def __draw_axes(self, shift_x=0, shift_y=0):
+        # self.tkcanvas.create_line(self.border+shift_x, self.tkcanvas_wh+shift_y,
+        #                           self.border+shift_x, self.border+shift_y, arrow=LAST)
+        #
+        # self.tkcanvas.create_line(self.border+shift_x, self.tkcanvas_wh+shift_y,
+        #                           self.border+self.tkcanvas_wh+shift_x, self.tkcanvas_wh+shift_y, arrow=LAST)
         pass
+
 
 # Просто добавь переменную бордера
 # И дальше не так сильно хардкодь, + придумай как сдвигать если там отрицалочка будет
@@ -252,9 +257,9 @@ class GUI(Tk):
     def __create_canvas_window(self):
         canvas_frame = Frame(self, bg='grey')
 
-        self.tkcanvas = Canvas(canvas_frame, width=self.tkcanvas_wh+10, height=self.tkcanvas_wh+10)
+        self.tkcanvas = Canvas(canvas_frame, width=self.tkcanvas_wh+2*self.border, height=self.tkcanvas_wh+2*self.border)
 
-        canvas_frame.grid(row=0, column=1, rowspan=3)
+        canvas_frame.grid(row=0, column=1, rowspan=4)
         self.tkcanvas.grid(row=0, column=0, padx=10, pady=10)
 
         self.__draw_axes()
@@ -279,37 +284,70 @@ class GUI(Tk):
         elif k_x < 1 and k_y < 1:
             k = min(k_x, k_y)
 
-        return k
+        return k, min_x, min_y
 
     def __draw_result(self, result, cir_center, cir_rad):
         self.tkcanvas.delete("all")
-        self.__draw_axes()
 
-        k = self.__get_scale(result)
-        print(k)
-        self.tkcanvas.create_line(10+result[0][0] * k, 10+self.tkcanvas_wh - result[0][1] * k,
-                                  10+result[1][0] * k, 10+self.tkcanvas_wh - result[1][1] * k,
+        getsc = self.__get_scale(result)
+
+        k = getsc[0]
+        min_x, min_y = getsc[1], getsc[2]
+        if min_x < 0:
+            shift_x = abs(min_x)
+        else:
+            shift_x = 0
+        if min_y < 0:
+            shift_y = abs(min_y)
+        else:
+            shift_y = 0
+        print(shift_y, shift_x)
+
+        self.__draw_axes(shift_x*k, shift_y*k)
+
+        self.tkcanvas.create_line(self.border+(shift_x+result[0][0])*k,
+                                  self.border+self.tkcanvas_wh-(result[0][1]+shift_y)*k,
+                                  self.border+(shift_x+result[1][0])*k,
+                                  self.border+self.tkcanvas_wh-(result[1][1]+shift_y)*k,
+                                  fill='green')
+
+        self.tkcanvas.create_line(self.border+(shift_x+result[1][0])*k,
+                                  self.border+self.tkcanvas_wh-(result[1][1]+shift_y)*k,
+                                  self.border+(shift_x+result[2][0])*k,
+                                  self.border+self.tkcanvas_wh-(result[2][1]+shift_y)*k,
+                                  fill='green')
+
+        self.tkcanvas.create_line(self.border+(result[2][0]+shift_x)*k,
+                                  self.border+self.tkcanvas_wh-(result[2][1]+shift_y)*k,
+                                  self.border+(result[0][0]+shift_x)*k,
+                                  self.border+self.tkcanvas_wh-(result[0][1]+shift_y)*k,
+                                  fill='green')
+
+        self.tkcanvas.create_oval(self.border+(cir_center[0]-cir_rad+shift_x)*k,
+                                  self.border+self.tkcanvas_wh-(cir_center[1]+cir_rad+shift_y)*k,
+                                  self.border+(cir_center[0]+cir_rad+shift_x)*k,
+                                  self.border+self.tkcanvas_wh-(cir_center[1]-cir_rad+shift_y)*k)
+
+        self.tkcanvas.create_text(self.border - 5 + (shift_x + result[0][0]) * k,
+                                  self.border + self.tkcanvas_wh - (result[0][1] + shift_y) * k,
+                                  text="({:.1f},{:.1f})".format(result[0][0], result[0][1]),
                                   fill='red')
 
-        self.tkcanvas.create_line(10+result[1][0] * k, 10+self.tkcanvas_wh - result[1][1] * k,
-                                  10+result[2][0] * k, 10+self.tkcanvas_wh - result[2][1] * k,
+        self.tkcanvas.create_text(self.border - 5 + (shift_x + result[1][0]) * k,
+                                  self.border + self.tkcanvas_wh - (result[1][1] + shift_y) * k,
+                                  text="({:.1f},{:.1f})".format(result[1][0], result[1][1]),
                                   fill='red')
 
-        self.tkcanvas.create_line(10+result[2][0] * k, 10+self.tkcanvas_wh - result[2][1] * k,
-                                  10+result[0][0] * k, 10+self.tkcanvas_wh - result[0][1] * k,
+        self.tkcanvas.create_text(self.border - 5 + (shift_x + result[2][0]) * k,
+                                  self.border + self.tkcanvas_wh - (result[2][1] + shift_y) * k,
+                                  text="({:.1f},{:.1f})".format(result[2][0], result[2][1]),
                                   fill='red')
-
-        self.tkcanvas.create_oval(10+(cir_center[0] - cir_rad) * k,
-                                  10+self.tkcanvas_wh - (cir_center[1] + cir_rad) * k,
-                                  10+(cir_center[0] + cir_rad) * k,
-                                  10+self.tkcanvas_wh - (cir_center[1] - cir_rad) * k)
-
-
 
 
 def main():
     gui = GUI()
     gui.mainloop()
+
 
 if __name__ == "__main__":
     main()
