@@ -15,19 +15,37 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lab_01.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="293" column="20" lean-forward="true" selection-start-line="293" selection-start-column="20" selection-end-line="293" selection-end-column="20" />
+            <state relative-caret-position="252">
+              <caret line="310" lean-forward="true" selection-start-line="310" selection-end-line="310" />
               <folding>
-                <element signature="e#3464#4224#0" />
-                <element signature="e#4266#4732#0" />
-                <element signature="e#4786#5257#0" />
-                <element signature="e#5306#6388#0" />
-                <element signature="e#6432#7217#0" />
-                <element signature="e#7263#7511#0" />
-                <element signature="e#7564#7783#0" />
-                <element signature="e#7816#7855#0" />
-                <element signature="e#7892#8383#0" />
-                <element signature="e#9386#10021#0" />
+                <element signature="e#104#1189#0" />
+                <element signature="e#1228#1916#0" />
+                <element signature="e#1950#2772#0" />
+                <element signature="e#2118#2707#0" />
+                <element signature="e#2174#2707#0" />
+                <element signature="e#2230#2707#0" />
+                <element signature="e#2459#2548#0" />
+                <element signature="e#2618#2707#0" />
+                <element signature="e#2813#2905#0" />
+                <element signature="e#2826#2851#0" />
+                <element signature="e#2939#3551#0" />
+                <element signature="e#3599#4359#0" />
+                <element signature="e#4401#4867#0" />
+                <element signature="e#4921#5392#0" />
+                <element signature="e#5061#5221#0" />
+                <element signature="e#5441#6523#0" />
+                <element signature="e#6567#7352#0" />
+                <element signature="e#6739#7352#0" />
+                <element signature="e#6929#7163#0" />
+                <element signature="e#7398#7646#0" />
+                <element signature="e#7570#7646#0" />
+                <element signature="e#7699#7918#0" />
+                <element signature="e#7951#7990#0" />
+                <element signature="e#9712#10095#0" />
+                <element signature="e#8577#8651#0" />
+                <element signature="e#8962#8996#0" />
+                <element signature="e#13153#13332#0" />
+                <element signature="e#13098#13128#0" />
               </folding>
             </state>
           </provider>
@@ -60,9 +78,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+    <option name="x" value="-9" />
+    <option name="width" value="978" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -146,7 +164,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.31805158" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.31728044" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39943343" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -171,19 +189,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lab_01.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="293" column="20" lean-forward="true" selection-start-line="293" selection-start-column="20" selection-end-line="293" selection-end-column="20" />
+        <state relative-caret-position="252">
+          <caret line="310" lean-forward="true" selection-start-line="310" selection-end-line="310" />
           <folding>
-            <element signature="e#3464#4224#0" />
-            <element signature="e#4266#4732#0" />
-            <element signature="e#4786#5257#0" />
-            <element signature="e#5306#6388#0" />
-            <element signature="e#6432#7217#0" />
-            <element signature="e#7263#7511#0" />
-            <element signature="e#7564#7783#0" />
-            <element signature="e#7816#7855#0" />
-            <element signature="e#7892#8383#0" />
-            <element signature="e#9386#10021#0" />
+            <element signature="e#104#1189#0" />
+            <element signature="e#1228#1916#0" />
+            <element signature="e#1950#2772#0" />
+            <element signature="e#2118#2707#0" />
+            <element signature="e#2174#2707#0" />
+            <element signature="e#2230#2707#0" />
+            <element signature="e#2459#2548#0" />
+            <element signature="e#2618#2707#0" />
+            <element signature="e#2813#2905#0" />
+            <element signature="e#2826#2851#0" />
+            <element signature="e#2939#3551#0" />
+            <element signature="e#3599#4359#0" />
+            <element signature="e#4401#4867#0" />
+            <element signature="e#4921#5392#0" />
+            <element signature="e#5061#5221#0" />
+            <element signature="e#5441#6523#0" />
+            <element signature="e#6567#7352#0" />
+            <element signature="e#6739#7352#0" />
+            <element signature="e#6929#7163#0" />
+            <element signature="e#7398#7646#0" />
+            <element signature="e#7570#7646#0" />
+            <element signature="e#7699#7918#0" />
+            <element signature="e#7951#7990#0" />
+            <element signature="e#9712#10095#0" />
+            <element signature="e#8577#8651#0" />
+            <element signature="e#8962#8996#0" />
+            <element signature="e#13153#13332#0" />
+            <element signature="e#13098#13128#0" />
           </folding>
         </state>
       </provider>

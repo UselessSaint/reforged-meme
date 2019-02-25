@@ -85,12 +85,26 @@ def coordinates_validation(x, y):
     return 1
 
 
+def find_triangle_sq(points):
+    first_vec_len = math.sqrt((points[0][0]-points[1][0])**2 + (points[0][1]-points[1][1])**2)
+    seconds_vec_len = math.sqrt((points[1][0]-points[2][0])**2 + (points[1][1]-points[2][1])**2)
+    third_vec_len = math.sqrt((points[2][0]-points[0][0])**2 + (points[2][1]-points[0][1])**2)
+
+    half_per = (first_vec_len + seconds_vec_len + third_vec_len) / 2
+
+    triagle_sq = math.sqrt(half_per *
+                           round((half_per - first_vec_len), 3) *
+                           round((half_per - seconds_vec_len), 3) *
+                           round((half_per - third_vec_len), 3))
+    return triagle_sq
+
+
 class GUI(Tk):
     def __init__(self):
         super().__init__()
         self.border = 27
 
-        self.geometry("727x610")
+        self.geometry("727x650")
         self.resizable(False, False)
 
         self.coordinates_frame = None
@@ -106,11 +120,14 @@ class GUI(Tk):
 
         self.coordinates_listbox = None
 
+        self.infolabel = None
+
         self.__create_coordinates_entry()
         self.__create_listbox()
         self.__create_listbox_editor()
         self.__create_canvas_window()
         self.__create_calculation_button()
+        self.__create_infolabel()
 
     def __create_coordinates_entry(self):
         coordinates_frame = Frame(self)
@@ -239,6 +256,13 @@ class GUI(Tk):
                 mb.showerror("Ошибка", "Не существует ни одного невырожденного треугольника")
             else:
                 cir_rad, cir_center = find_base_cir(result)
+                sq_triangle = find_triangle_sq(result)
+                sq_cir = cir_rad**2 * math.pi
+                self.infolabel.config(text="Точки, образующие треугольник: %s\n" % result +
+                                      "Площадь треугольника: %.2f\n" % sq_triangle +
+                                      "Площадь круга: %.2f\n" % sq_cir +
+                                      "Разность: %.2f\n" % (sq_triangle-sq_cir))
+
                 self.__draw_result(result, cir_center, cir_rad)
 
     def __draw_axes(self, shift_x=0, shift_y=0):
@@ -249,7 +273,6 @@ class GUI(Tk):
         #                           self.border+self.tkcanvas_wh+shift_x, self.tkcanvas_wh+shift_y, arrow=LAST)
         pass
 
-
 # Просто добавь переменную бордера
 # И дальше не так сильно хардкодь, + придумай как сдвигать если там отрицалочка будет
 # И оси еще по красивому строй, давай еба, у тебя один день остался
@@ -257,7 +280,8 @@ class GUI(Tk):
     def __create_canvas_window(self):
         canvas_frame = Frame(self, bg='grey')
 
-        self.tkcanvas = Canvas(canvas_frame, width=self.tkcanvas_wh+2*self.border, height=self.tkcanvas_wh+2*self.border)
+        self.tkcanvas = Canvas(canvas_frame,
+                               width=self.tkcanvas_wh+2*self.border, height=self.tkcanvas_wh+2*self.border)
 
         canvas_frame.grid(row=0, column=1, rowspan=4)
         self.tkcanvas.grid(row=0, column=0, padx=10, pady=10)
@@ -275,13 +299,12 @@ class GUI(Tk):
         k_x = self.tkcanvas_wh / (max_x - min_x)
         k_y = self.tkcanvas_wh / (max_y - min_y)
 
-        if k_x >= 1 and k_y >= 1:
-            k = min(k_x, k_y)
-        elif k_x < 1 and k_y >= 1:
+
+        if k_x < 1 and k_y >= 1:
             k = k_x
         elif k_x >= 1 and k_y < 1:
             k = k_y
-        elif k_x < 1 and k_y < 1:
+        else:
             k = min(k_x, k_y)
 
         return k, min_x, min_y
@@ -342,6 +365,14 @@ class GUI(Tk):
                                   self.border + self.tkcanvas_wh - (result[2][1] + shift_y) * k,
                                   text="({:.1f},{:.1f})".format(result[2][0], result[2][1]),
                                   fill='red')
+
+    def __create_infolabel(self):
+        label_frame = Frame(self)
+
+        self.infolabel = Label(label_frame, text='')
+
+        label_frame.grid(row=5, column=1)
+        self.infolabel.pack()
 
 
 def main():
