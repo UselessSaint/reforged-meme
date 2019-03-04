@@ -11,6 +11,13 @@ def astroida_point(angle, radius):
     return [x, y]
 
 
+def circle_point(angle, radius):
+    x = radius*math.cos(angle)
+    y = radius*math.sin(angle)
+
+    return  [x, y]
+
+
 class GUI(Tk):
     def __init__(self):
         super().__init__()
@@ -38,6 +45,11 @@ class GUI(Tk):
         self.in_circle_radius = self.radius/4
         self.in_circle_point = None
 
+        self.prev_astr = None
+        self.prev_rect = None
+        self.prev_incps = None # prev_in_circle_points
+        self.prev_incp = None # prev_in_circle_point
+
         self.__create_startpoint_menu()
         self.__create_canvas()
         self.__init_drawing_coordinated()
@@ -45,6 +57,7 @@ class GUI(Tk):
         self.__create_transfer_menu()
         self.__create_scaling_menu()
         self.__create_turn_menu()
+        # self.__create_return_button()
 
     def __create_scaling_menu(self):
         scaling_frame = Frame(self)
@@ -225,9 +238,6 @@ class GUI(Tk):
                 sp_y-(self.in_circle_point[i][0]-sp_x)*math.sin(angle) + \
                 (self.in_circle_point[i][1]-sp_y)*math.cos(angle)
 
-
-        self.in_circle_points[i][0] =
-
         self.__draw()
 
     def __create_startpoint_menu(self):
@@ -275,7 +285,7 @@ class GUI(Tk):
                              width=self.canvas_size+self.border,
                              height=self.canvas_size+self.border)
 
-        canvas_frame.grid(row=0, column=1, rowspan=4)
+        canvas_frame.grid(row=0, column=1, rowspan=5)
         self.canvas.grid(row=0, column=0, padx=5, pady=5)
 
     def __init_drawing_coordinated(self):
@@ -295,13 +305,8 @@ class GUI(Tk):
         self.rect_points[2][1] -= self.rect_lesser_side
         self.rect_points[3][1] -= self.rect_lesser_side
 
-        self.in_circle_points = [astroida_point(math.pi/2, self.radius),
-                                 astroida_point(math.pi/2, self.radius)]
-
-        self.in_circle_points[0][0] -= self.in_circle_radius
-        self.in_circle_points[0][1] = self.in_circle_radius
-        self.in_circle_points[1][0] += self.in_circle_radius
-        self.in_circle_points[1][1] = -self.in_circle_radius
+        for i in range(len(pi_array)):
+            self.in_circle_points.append(circle_point(pi_array[i], self.in_circle_radius))
 
         self.in_circle_point = [astroida_point(math.pi/2, self.radius),
                                 astroida_point(math.pi/2, self.radius)]
@@ -311,7 +316,7 @@ class GUI(Tk):
 
     def __draw(self):
         self.canvas.delete("all")
-        print(self.in_circle_points)
+
         for i in range(len(self.astroida_points)-1):
             self.canvas.create_line(self.canvas_size/2-self.astroida_points[i][0],
                                     self.canvas_size/2-self.astroida_points[i][1],
@@ -333,15 +338,39 @@ class GUI(Tk):
                                 self.canvas_size/2-self.rect_points[0][0],
                                 self.canvas_size/2-self.rect_points[0][1])
 
-        self.canvas.create_oval(self.canvas_size/2-self.in_circle_points[0][0],
-                                self.canvas_size/2-self.in_circle_points[0][1],
-                                self.canvas_size/2-self.in_circle_points[1][0],
-                                self.canvas_size/2-self.in_circle_points[1][1])
+        for i in range(len(self.in_circle_points)-1):
+            self.canvas.create_line(self.canvas_size/2-self.in_circle_points[i][0],
+                                         self.canvas_size/2-self.in_circle_points[i][1],
+                                         self.canvas_size/2-self.in_circle_points[i+1][0],
+                                         self.canvas_size/2-self.in_circle_points[i+1][1])
 
         self.canvas.create_oval(self.canvas_size/2-self.in_circle_point[0][0],
                                 self.canvas_size/2-self.in_circle_point[0][1],
                                 self.canvas_size/2-self.in_circle_point[1][0],
                                 self.canvas_size/2-self.in_circle_point[1][1])
+
+    def __create_return_button(self):
+        ret_but_frame = Frame(self)
+
+        ret_button = Button(ret_but_frame, text="Возврат",
+                            command=self.__set_prev_values)
+
+        ret_button.grid(row=0, column=0, columnspan=4)
+        ret_but_frame.grid(row=4, column=0)
+
+    def __set_prev_values(self):
+        self.astroida_points = self.prev_astr
+        self.in_circle_points = self.prev_incps
+        self.in_circle_point = self.prev_incp
+        self.rect_points = self.prev_rect
+
+        self.__draw()
+
+    def __save_prev(self):
+        self.prev_astr = self.astroida_points
+        self.prev_incp = self.in_circle_point
+        self.prev_rect = self.rect_points
+        self.prev_incps = self.in_circle_points
 
 
 def main():
