@@ -57,7 +57,7 @@ class GUI(Tk):
         self.__create_transfer_menu()
         self.__create_scaling_menu()
         self.__create_turn_menu()
-        # self.__create_return_button()
+        self.__create_return_button()
 
     def __create_scaling_menu(self):
         scaling_frame = Frame(self)
@@ -81,6 +81,8 @@ class GUI(Tk):
         scaling_frame.grid(row=2, column=0, padx=5, pady=5)
 
     def __scale(self):
+        self.__save_prev()
+
         kx, ky = self.sc_x_entry.get(), self.sc_y_entry.get()
         sp_x, sp_y = self.sp_x_entry.get(), self.sp_y_entry.get()
 
@@ -102,11 +104,11 @@ class GUI(Tk):
             return
 
         # x1 = kx * x + (1 - kx) xm
-
+        print(self.prev_astr)
         for i in range(len(self.astroida_points)):
             self.astroida_points[i][0] = self.astroida_points[i][0]*kx+(1-kx)*sp_x
             self.astroida_points[i][1] = self.astroida_points[i][1]*ky+(1-ky)*sp_y
-
+        print(self.prev_astr)
         for i in range(len(self.rect_points)):
             self.rect_points[i][0] = self.rect_points[i][0]*kx+(1-kx)*sp_x
             self.rect_points[i][1] = self.rect_points[i][1]*ky+(1-ky)*sp_y
@@ -143,6 +145,8 @@ class GUI(Tk):
         transfer_frame.grid(row=1, column=0, padx=5, pady=5)
 
     def __transfer(self):
+        self.__save_prev()
+
         dx = self.t_x_entry.get()
         dy = self.t_y_entry.get()
 
@@ -189,6 +193,8 @@ class GUI(Tk):
         turn_frame.grid(row=3, column=0, padx=5, pady=5)
 
     def __turn(self):
+        self.__save_prev()
+
         angle = self.angle_entry.get()
         sp_x, sp_y = self.sp_x_entry.get(), self.sp_y_entry.get()
 
@@ -314,6 +320,8 @@ class GUI(Tk):
         self.in_circle_point[0][1] = 0
         self.in_circle_point[1][1] = 0
 
+        self.__save_prev()
+
     def __draw(self):
         self.canvas.delete("all")
 
@@ -367,10 +375,10 @@ class GUI(Tk):
         self.__draw()
 
     def __save_prev(self):
-        self.prev_astr = self.astroida_points
-        self.prev_incp = self.in_circle_point
-        self.prev_rect = self.rect_points
-        self.prev_incps = self.in_circle_points
+        self.prev_astr = [self.astroida_points[i].copy() for i in range(len(self.astroida_points))]
+        self.prev_incp = [self.in_circle_point[i].copy() for i in range(len(self.in_circle_point))]
+        self.prev_rect = [self.rect_points[i].copy() for i in range(len(self.rect_points))]
+        self.prev_incps = [self.in_circle_points[i].copy() for i in range(len(self.in_circle_points))]
 
 
 def main():
