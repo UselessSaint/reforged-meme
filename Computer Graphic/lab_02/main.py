@@ -50,6 +50,11 @@ class GUI(Tk):
         self.prev_incps = None # prev_in_circle_points
         self.prev_incp = None # prev_in_circle_point
 
+        self.default_astr = None
+        self.default_rect = None
+        self.default_incps = None
+        self.default_incp = None
+
         self.__create_startpoint_menu()
         self.__create_canvas()
         self.__init_drawing_coordinated()
@@ -104,11 +109,11 @@ class GUI(Tk):
             return
 
         # x1 = kx * x + (1 - kx) xm
-        print(self.prev_astr)
+
         for i in range(len(self.astroida_points)):
             self.astroida_points[i][0] = self.astroida_points[i][0]*kx+(1-kx)*sp_x
             self.astroida_points[i][1] = self.astroida_points[i][1]*ky+(1-ky)*sp_y
-        print(self.prev_astr)
+
         for i in range(len(self.rect_points)):
             self.rect_points[i][0] = self.rect_points[i][0]*kx+(1-kx)*sp_x
             self.rect_points[i][1] = self.rect_points[i][1]*ky+(1-ky)*sp_y
@@ -276,6 +281,7 @@ class GUI(Tk):
         except ValueError:
             mb.showerror("Ошибка", "Координаты центра масштабирования/поворота "
                                    "должны быть вещественными числами")
+            return
 
         self.__draw()
         self.canvas.create_oval(self.canvas_size/2+sp_x-2,
@@ -320,6 +326,12 @@ class GUI(Tk):
         self.in_circle_point[0][1] = 0
         self.in_circle_point[1][1] = 0
 
+
+        self.default_astr = [self.astroida_points[i].copy() for i in range(len(self.astroida_points))]
+        self.default_rect = [self.rect_points[i].copy() for i in range(len(self.rect_points))]
+        self.default_incp = [self.in_circle_point[i].copy() for i in range(len(self.in_circle_point))]
+        self.default_incps = [self.in_circle_points[i].copy() for i in range(len(self.in_circle_points))]
+
         self.__save_prev()
 
     def __draw(self):
@@ -363,8 +375,22 @@ class GUI(Tk):
         ret_button = Button(ret_but_frame, text="Возврат",
                             command=self.__set_prev_values)
 
+        set_default_button = Button(ret_but_frame, text="Вернуть и изначальному",
+                                    command=self.__set_default)
+
+        set_default_button.grid(row=1, column=0, columnspan=4)
         ret_button.grid(row=0, column=0, columnspan=4)
         ret_but_frame.grid(row=4, column=0)
+
+    def __set_default(self):
+        self.__save_prev()
+
+        self.astroida_points = [self.default_astr[i].copy() for i in range(len(self.default_astr))]
+        self.in_circle_points = [self.default_incps[i].copy() for i in range(len(self.default_incps))]
+        self.in_circle_point = [self.default_incp[i].copy() for i in range(len(self.default_incp))]
+        self.rect_points = [self.default_rect[i].copy() for i in range(len(self.default_rect))]
+
+        self.__draw()
 
     def __set_prev_values(self):
         self.astroida_points = self.prev_astr
