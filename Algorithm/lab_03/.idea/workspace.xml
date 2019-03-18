@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a86eb008-333e-4c32-a357-871c8459b952" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_gen.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="a86eb008-333e-4c32-a357-871c8459b952" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,10 +14,11 @@
         <entry file="file://$PROJECT_DIR$/../../../../tree/tree.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
-              <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+              <caret line="11" column="53" lean-forward="true" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
-                <marker date="1552861735723" expanded="true" signature="704:1020" ph="..." />
+                <marker date="1552864380365" expanded="true" signature="864:1099" ph="..." />
+                <marker date="1552864380365" expanded="true" signature="1201:1505" ph="..." />
               </folding>
             </state>
           </provider>
@@ -50,7 +46,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="-7" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
@@ -262,10 +258,11 @@
     <entry file="file://$PROJECT_DIR$/../../../../tree/tree.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
-          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+          <caret line="11" column="53" lean-forward="true" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-            <marker date="1552861735723" expanded="true" signature="704:1020" ph="..." />
+            <marker date="1552864380365" expanded="true" signature="864:1099" ph="..." />
+            <marker date="1552864380365" expanded="true" signature="1201:1505" ph="..." />
           </folding>
         </state>
       </provider>
