@@ -18,13 +18,13 @@ def find_nearest_points_xy(in_data, x, y):
         # elif in_data[(lower + upper)//2][0] == x:
         #     near_x = (lower + upper)//2
 
-    try:
-        if abs(x - in_data[0][upper]) > abs(x - in_data[0][lower]):
-            near_x = lower
-        else:
-            near_x = upper
-    except IndexError:
-        near_x = lower
+    # try:
+    #     if abs(x - in_data[0][upper]) > abs(x - in_data[0][lower]):
+    #         near_x = lower
+    #     else:
+    #         near_x = upper
+    # except IndexError:
+    near_x = lower
 
     lower = 1
     upper = in_data_len
@@ -35,13 +35,13 @@ def find_nearest_points_xy(in_data, x, y):
         elif in_data[(lower + upper)//2][0] <= y:
             lower = (lower + upper)//2
 
-    try:
-        if abs(y - in_data[upper][0]) > abs(y - in_data[lower][0]):
-            near_y = lower
-        else:
-            near_y = upper
-    except IndexError:
-        near_y = lower
+    # try:
+    #     if abs(y - in_data[upper][0]) > abs(y - in_data[lower][0]):
+    #         near_y = lower
+    #     else:
+    #         near_y = upper
+    # except IndexError:
+    near_y = lower
 
     return near_x, near_y
 
@@ -97,8 +97,8 @@ def main():
             low_edge_y -= 1
             amnt_of_p_y -= 1
 
-    # print(up_edge_x, low_edge_x)
-    # print(up_edge_y, low_edge_y)
+    # print(up_edge_x, low_edge_x, in_data[0][up_edge_x], in_data[0][low_edge_x])
+    # print(up_edge_y, low_edge_y, in_data[up_edge_y][0], in_data[low_edge_y][0])
 
     y_values = [in_data[i][0] for i in range(len(in_data))]
     x_values = [in_data[0][i] for i in range(1, len(in_data))]
@@ -109,8 +109,9 @@ def main():
     for j in range(low_edge_y, up_edge_y + 1):
         for i in range(len(x_values)):
             z_values = in_data[j][1:]
-            cur_table = [[x_values[i], z_values[i]] for i in range(len(z_values))]
+            cur_table = [[x_values[i], z_values[i]] for i in range(low_edge_x-1, up_edge_x)]
         zy.append(interpolate(x, xn, cur_table))
+        # print(interpolate(x, xn, cur_table))
 
     y_values = y_values[low_edge_y:up_edge_y+1]
     cur_table = [[y_values[i], zy[i]] for i in range(len(zy))]

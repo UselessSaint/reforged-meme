@@ -13,17 +13,17 @@ def find_nearest_point(input_data, x):
     while abs(upper - lower) > 1:
         if input_data[(lower + upper)//2][0] > x:
             upper = (lower + upper)//2
-        elif input_data[(lower + upper)//2][0] < x:
+        elif input_data[(lower + upper)//2][0] <= x:
             lower = (lower + upper)//2
-        elif input_data[(lower + upper)//2][0] == x:
-            return (lower + upper)//2
+        # elif input_data[(lower + upper)//2][0] == x:
+        #     return (lower + upper)//2
 
     if abs(x - upper) > abs(x - lower):
         result = lower
     else:
         result = upper
 
-    return result
+    return lower
 
 
 def find_nearest_pointt(input_data, x):
@@ -38,6 +38,7 @@ def find_nearest_pointt(input_data, x):
             current_diff = abs(input_data[i][0] - x)
 
     return result
+
 
 def find_div_diff(input_data, lower_edge, upped_edge):
     n = upped_edge - lower_edge
@@ -98,7 +99,7 @@ def interpolate(x, n, input_data):
         if amount_of_points > 0 and lower_edge > 0:
             lower_edge -= 1
             amount_of_points -= 1
-
+    # print("---", upped_edge, input_data[upped_edge], lower_edge, input_data[lower_edge])
     div_diff = find_div_diff(input_data, lower_edge, upped_edge)
 
     value = find_value(x, div_diff, input_data[lower_edge:upped_edge])
