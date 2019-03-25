@@ -315,7 +315,7 @@ class GUI(Tk):
             t_color = self.__alpha_color(color, e)
             self.canvas.create_oval(x, y, x, y, outline=t_color)
 
-            if e < w:
+            if e <= w:
                 if not xchng:
                     x += sx
                 else:
