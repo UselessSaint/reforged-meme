@@ -88,7 +88,7 @@ def main():
 
     draw_grag(coefs, x, y)
 
-    print(fi(xf, coefs))
+    # print(fi(xf, coefs))
     # print(math.cos(xf))
 
 

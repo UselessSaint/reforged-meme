@@ -2,6 +2,7 @@
   <dictionary name="Tree">
     <words>
       <w>coefs</w>
+      <w>grag</w>
       <w>mult</w>
       <w>xdata</w>
       <w>ydata</w>
