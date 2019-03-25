@@ -1,11 +1,26 @@
 import math
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def draw_grag(coefs, xdata, ydata):
+    cx = np.arange(xdata[0], xdata[-1] + 1e-10, 0.1)
+    x = list()
+    y = list()
+    for i in cx:
+        x.append(i)
+        y.append(fi(i, coefs))
+
+    plt.plot(x, y)
+    for i in range(len(xdata)):
+        plt.scatter(x=xdata[i], y=ydata[i], alpha=0.3)
+    plt.show()
 
 
 def fi(x, coefs):
     result = 0
     for i in range(len(coefs)):
         result += x**i * coefs[i]
-        print(coefs[i], x**i)
 
     return result
 
@@ -33,7 +48,8 @@ def solve_slay_gaus(mtr, left_side):
 
     for i in range(n-2, -1, -1):
         for k in range(i+1, n):
-            left_side[i] -= mtr[i][k] * left_side[i+1]
+            left_side[i] -= mtr[i][k] * left_side[k]
+
         left_side[i] /= mtr[i][i]
 
     return left_side
@@ -55,7 +71,7 @@ def main():
     while True:
         try:
             n = int(input("Введите n: "))
-            xf = float(input("Введите x: "))
+            # xf = float(input("Введите x: "))
             break
         except ValueError:
             print("n должно быть действительным числом.")
@@ -68,12 +84,12 @@ def main():
             coef_mtr[i].append(scalar_mult(i, x, j, x, w))
         left_side_list.append(scalar_mult(1, y, i, x, w))
 
-    # [print(i) for i in coef_mtr]
-    # print(left_side_list)
-
     coefs = solve_slay_gaus(coef_mtr, left_side_list)
-    print(coefs)
+
+    draw_grag(coefs, x, y)
+
     print(fi(xf, coefs))
+    # print(math.cos(xf))
 
 
 if __name__=='__main__':

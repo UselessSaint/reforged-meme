@@ -3,9 +3,9 @@ import numpy as np
 
 
 def f(x):
-    return x*x
+    return x*x - 16*math.cos(x)
     # return math.cos(math.pi/2*x)
-    # return math.cos(x) - x
+    # return math.cos(x)
     # return math.cos(x)**3 - 3*math.sin(4*x)**2
 
 
