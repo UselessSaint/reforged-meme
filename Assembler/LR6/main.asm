@@ -1,47 +1,80 @@
-EXTRN M1: near
-EXTRN M2: near
-EXTRN M3: near
-EXTRN M4: near
-EXTRN M5: near
-EXTRN M6: near
+EXTRN M1: NEAR
+EXTRN M2: NEAR
+;EXTRN M3: NEAR
+;EXTRN M4: NEAR
+;EXTRN M5: NEAR
+;EXTRN M6: NEAR
 
 StkSeg  SEGMENT PARA STACK 'STACK'
-        DB      200h DUP (0)
+        DB      200h DUP (?)
 StkSeg  ENDS
 
-DataS   SEGMENT BYTE PUBLIC 'DATA'
-	OFFM 	dw M1, M2, M3, M4, M5, M6
-	N		db 0
+DataS   SEGMENT BYTE PUBLIC
+	X    DW 1
+	OFFM DW M1, M2;, M3, M4, M5, M6 
 DataS   ENDS
-
-ASSUME  CS:Code, DS:DataS, SS:StkSeg
+	
 Code    SEGMENT BYTE PUBLIC 'CODE'
-        
-	main:
-		mov AX, DataS
-		mov DS, AX
-		call M1
-		
-	menu:
-		mov AH, 8
-		int 21h
-		mov AH, 2
-		mov DL, AL
-		int 21h
-		
-		cmp   AL, '8'                
-		JA    menu
-		CMP   AL, '0'
-		JB    menu
-		
-		mov BX, 0
-		mov BL, AL
-		sub BL, '0'
-		
-		call OFFM[BX]
+        ASSUME  CS:Code, DS:DataS
 
-	exit:
-		mov AH, 4Ch
-		int 21h
+newline PROC NEAR
+	PUSH  AX
+	PUSH  DX
+
+	MOV   AH,2
+	MOV   DL,10
+	INT   21h
+	MOV   DL,13
+	INT   21h
+
+	POP   DX
+	POP   AX
+	RET
+newline ENDP
+
+DispMsg:
+    mov   AX,DataS              
+    mov   DS,AX                   
+        
+	CALL  M1
+menu_loop:
+	mov   AH, 8                    
+	int   21h
+	cmp   AL, '8'                  
+	JA    menu_loop
+	CMP   AL, '0'
+	JB    menu_loop
+
+	MOV   AH,2                    		
+	MOV   DL,AL
+	INT   21h
+
+	CMP   AL, '8'                  
+	JE    exit
+
+	CALL  newline
+
+	mov   BL, AL                   
+	sub   BL, '0'
+	ADD   BL, BL
+	mov   BH, 0
+	CMP   BL, 2
+	JNE   skip
+	PUSH  X
+skip:
+	CALL  OFFM[BX]
+
+	CMP   BL, 2
+	JNE   NOT_READ
+	MOV   X, AX
+	JMP   menu_loop
+NOT_READ:
+	ADD   SP, 2
+	JMP   menu_loop               
+
+
+exit:	
+        mov   AH,4Ch                   
+        int   21h                      
 Code    ENDS
-        END   main
+        END   DispMsg

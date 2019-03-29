@@ -1,33 +1,31 @@
-PUBLIC	M1
+PUBLIC M1
 
-DataMenu   SEGMENT BYTE PUBLIC 'DATA'
-	menu	db 13, 10
-			db "'0' Print menu.", 13, 10
-			db "'1' Enter number", 13, 10
-			db "'2' __________", 13, 10
-			db "'3' __________", 13, 10
-			db "'4' __________", 13, 10
-			db "'5' __________", 13, 10
-			db "'6' __________", 13, 10
-			db "'7' __________", 13, 10
-			db "'8' Exit.", 13, 10
-			db "Choose: "
-			db "$"
-DataMenu   ENDS
+DataS   SEGMENT PUBLIC
+	MENU DB "'0' Print menu", 13, 10
+	     DB "'1' Enter number", 13, 10
+	     DB "'2' Some action", 13, 10
+		 DB "'3' ___________", 13, 10
+		 DB "'4' ___________", 13, 10
+		 DB "'5' ___________", 13, 10
+		 DB "'6' ___________", 13, 10
+		 DB "'7' ___________", 13, 10
+		 DB "'8' Exit", 13, 10
+		 DB "Choose action"
+	     DB "$"
+DataS   ENDS
 
-ASSUME	CS:CSEG, DS:DataMenu
+ASSUME  CS:Code, DS:DataS
+Code    SEGMENT BYTE PUBLIC 'CODE'
+     M1: 
+		PUSH  AX
+		PUSH  DX
 
-CSEG	SEGMENT byte PUBLIC 'CODE'
-	M1:
-		;push AX
-		;push DX
-		
-		;mov DX, offset menu
-		;mov AH, 9
-		;int 21h
-		
-		;pop DX
-		;pop AX
-		ret
-CSEG	ENDS
+		mov   DX,OFFSET MENU
+		mov   AH,9
+		int   21h 
+
+		POP   DX
+		POP   AX
+		RET
+Code    ENDS
 	END
