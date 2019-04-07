@@ -7,7 +7,7 @@ import numpy
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("770x565")
+        self.geometry("770x585")
         self.resizable(False, False)
 
         self.radius_entry = None
@@ -65,7 +65,7 @@ class GUI(Tk):
                        ("Красный", "#FF0000"),
                        ("Зеленый", "#00FF00"),
                        ("Синий", "#3375dd"),
-                       ("Фиолетовый", "#7020FF")]
+                       ("Черный", "#151515")]
 
         for i in range(len(self.colors)):
             rb = Radiobutton(color_rb_frame, text=self.colors[i][0], value=i, variable=self.color_rb)
@@ -91,7 +91,7 @@ class GUI(Tk):
 
     def __create_draw_n_cmp_n_clear_buttons(self):
         draw_n_cmp_frame = Frame(self.param_frame)
-        draw_n_cmp_frame.grid(row=3, column=0, sticky=W+E)
+        draw_n_cmp_frame.grid(row=3, column=0, sticky=W+E, pady=5)
 
         draw_ellipse = Button(draw_n_cmp_frame, text="Нарисовать эллипс", command=self.__draw_ell)
         draw_circle = Button(draw_n_cmp_frame, text="Нарисовать окружность", command=self.__draw_crs)

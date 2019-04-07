@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ff8b837-0cfa-4e5f-a6e0-89610494d799" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab_03/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lab_03/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,67 +12,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.44658118">
-      <split-first>
-        <leaf>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="212">
-                  <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
-                  <folding>
-                    <element signature="e#0#21#0" expanded="true" />
-                    <element signature="e#133#759#0" />
-                    <element signature="e#690#1595#0" />
-                    <element signature="e#1621#2337#0" />
-                    <element signature="e#2339#3123#0" />
-                    <element signature="e#3128#3640#0" />
-                    <element signature="e#3813#4115#0" />
-                    <element signature="e#4180#4335#0" />
-                    <element signature="e#4547#4856#0" />
-                    <element signature="e#5027#5322#0" />
-                    <element signature="e#5356#5622#0" />
-                    <element signature="e#5737#6003#0" />
-                    <element signature="e#5780#6195#0" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/../lab_03/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="127">
-                  <caret line="301" column="25" selection-start-line="301" selection-start-column="25" selection-end-line="301" selection-end-column="25" />
-                  <folding>
-                    <element signature="e#0#21#0" expanded="true" />
-                    <element signature="e#147#835#0" />
-                    <element signature="e#882#1952#0" />
-                    <element signature="e#1995#2663#0" />
-                    <element signature="e#2707#3491#0" />
-                    <element signature="e#3552#4064#0" />
-                    <element signature="e#4105#4407#0" />
-                    <element signature="e#4439#4677#0" />
-                    <element signature="e#4712#5253#0" />
-                    <element signature="e#5286#5311#0" />
-                    <element signature="e#5372#5773#0" />
-                    <element signature="e#5812#5927#0" />
-                    <element signature="e#5986#7053#0" />
-                    <element signature="e#7114#8194#0" />
-                    <element signature="e#8247#8466#0" />
-                    <element signature="e#9734#10443#0" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="275">
+              <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#133#768#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -87,12 +41,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/../lab_03/main.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-7" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
@@ -132,7 +86,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main (1)">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="lab_04" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -177,8 +131,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -196,23 +150,23 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" weight="0.24973656" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.24835886" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.24593717" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -223,28 +177,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="1704" selection-start-line="1704" selection-end-line="1704" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#133#759#0" />
-            <element signature="e#690#1595#0" />
-            <element signature="e#1621#2337#0" />
-            <element signature="e#2339#3123#0" />
-            <element signature="e#3128#3640#0" />
-            <element signature="e#3813#4115#0" />
-            <element signature="e#4180#4335#0" />
-            <element signature="e#4547#4856#0" />
-            <element signature="e#5027#5322#0" />
-            <element signature="e#5356#5622#0" />
-            <element signature="e#5737#6003#0" />
-            <element signature="e#5780#6195#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -268,7 +200,17 @@
             <element signature="e#5986#7053#0" />
             <element signature="e#7114#8194#0" />
             <element signature="e#8247#8466#0" />
-            <element signature="e#9734#10443#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#133#768#0" />
           </folding>
         </state>
       </provider>
