@@ -85,8 +85,12 @@ private:
 	int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
 	int** mtr = MatrixIterator<T>::mtr;
 public:
-	MatrixIteratorEnd()
+	MatrixIteratorEnd(int n, int m, T** matrix)
 	{
+		rows = n;
+		cols = m;
+		mtr = matrix;
+
 		MatrixIterator<T>::cur_elem = &(mtr[rows-1][cols-1]);
 	}
 };

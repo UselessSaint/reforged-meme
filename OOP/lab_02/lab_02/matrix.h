@@ -83,19 +83,8 @@ public:
 		delete [] mtr;
 	}
 
-	// Вообще, тут, наверное, стоит использовать будующий итероатор
-	// Так что это добро тут до поры до времени
 	void print()
 	{
-		/*for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
-				cout << mtr[i][j] << " ";
-			}
-			cout << endl;
-		}*/
-
 		auto it = this->beginRow();
 		auto end = this->end();
 
@@ -104,6 +93,7 @@ public:
 			cout << *it << " ";
 			++it;
 		}
+		cout << *end;
 	}
 
 	MatrixIteratorRow<T> beginRow()
@@ -118,7 +108,7 @@ public:
 
 	MatrixIterator<T> end()
 	{
-		return MatrixIteratorEnd<T>();
+		return MatrixIteratorEnd<T>(rows, cols, mtr);
 	}
 };
 

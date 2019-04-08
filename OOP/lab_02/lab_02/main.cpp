@@ -10,7 +10,7 @@ int main()
 	try
 	{
 		Matrix<int> m(2,2, {2, 3,
-							4, 2});
+							4, 5});
 
 		m.print();
 	}
