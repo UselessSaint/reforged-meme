@@ -11,7 +11,6 @@ class Matrix
 private:
 	T** mtr = nullptr;
 	int rows = 0, cols = 0;
-
 public:
 	Matrix(int n, int m)
 	{
@@ -32,15 +31,12 @@ public:
 		}
 	}
 
-	Matrix(int n, int m, initializer_list<T> list)
+	Matrix(initializer_list<T> list)
 	{
 		if (n < 0 || m < 0)
 		{
 			throw Matrix_size_error();
 		}
-
-		rows = n;
-		cols = m;
 
 		if (int(list.size()) > n*m)
 		{
@@ -52,7 +48,7 @@ public:
 
 		mtr = new T* [rows];
 
-		for (int i = 0; i < cols; i++)
+		for (int i = 0; i < rows; i++)
 		{
 			mtr[i] = new T [cols];
 			fill_n(mtr[i], cols, 0);
@@ -68,10 +64,6 @@ public:
 				{
 					mtr[i][j] = *it;
 					it++;
-				}
-				else
-				{
-					mtr[i][j] = 0;
 				}
 			}
 		}
@@ -130,6 +122,11 @@ public:
 		cout << *end << endl;
 	}
 
+	T& elementAt(int n, int m)
+	{
+		return mtr[n][m];
+	}
+	
 	MatrixIteratorRow<T> beginRow()
 	{
 		return MatrixIteratorRow<T>(rows, cols, mtr);
