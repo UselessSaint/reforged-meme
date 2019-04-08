@@ -9,7 +9,7 @@ class MatrixIterator
 protected:
 	int rows = 0, cols = 0;
 	T* cur_elem = nullptr;
-	int **mtr;
+	T **mtr;
 public:
 	virtual bool operator ==(const MatrixIterator& second)
 	{
@@ -28,11 +28,11 @@ public:
 };
 
 template <typename T>
-class MatrixIteratorRow: public MatrixIterator<T>
+class MatrixIteratorRow: virtual public MatrixIterator<T>
 {
 private:
 	int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
-	int** mtr = MatrixIterator<T>::mtr;
+	T** mtr = MatrixIterator<T>::mtr;
 	int cur_row = 0, cur_col = 0;
 public:
 	MatrixIteratorRow(int n, int m, T** matrix)
@@ -61,11 +61,11 @@ public:
 };
 
 template <typename T>
-class MatrixIteratorColumn: public MatrixIterator<T>
+class MatrixIteratorColumn: virtual public MatrixIterator<T>
 {
 private:
 	int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
-	int** mtr = MatrixIterator<T>::mtr;
+	T** mtr = MatrixIterator<T>::mtr;
 	int cur_row = 0, cur_col = 0;
 public:
 	MatrixIteratorColumn(int n, int m, T** matrix)
@@ -76,14 +76,29 @@ public:
 
 		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
 	}
+
+	MatrixIteratorColumn& operator ++()
+	{
+		if (cur_row == rows-1)
+		{
+			cur_row = 0;
+			cur_col++;
+		}
+		else
+		{
+			cur_row++;
+		}
+		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
+		return *this;
+	}
 };
 
 template  <typename T>
-class MatrixIteratorEnd: public MatrixIterator<T>
+class MatrixIteratorEnd: virtual public MatrixIterator<T>
 {
 private:
 	int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
-	int** mtr = MatrixIterator<T>::mtr;
+	T** mtr = MatrixIterator<T>::mtr;
 public:
 	MatrixIteratorEnd(int n, int m, T** matrix)
 	{

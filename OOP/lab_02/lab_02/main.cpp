@@ -1,7 +1,6 @@
 #include <iostream>
 #include "includes.h"
 #include "matrix.h"
-#include "iterator.h"
 
 using namespace std;
 
@@ -9,14 +8,24 @@ int main()
 {
 	try
 	{
-		Matrix<int> m(2,2, {2, 3,
+		Matrix<int> m(2,3, {2, 3,
 							4, 5});
 
-		m.print();
+		m.printRows();
+		cout << "---------" << endl;
+		m.printColumns();
+
+		Matrix<double> q(5,5,  {1.2,2.2,3.2,4.2,5.2,
+								1,2,3,4,5,
+								1,2,3,4,5});
+		cout << "---------" << endl;
+		q.printRows();
+		cout << "---------" << endl;
+		q.printColumns();
 	}
-	catch (exception& e)
+	catch (exception& exc)
 	{
-		cout << e.what();
+		cout << exc.what();
 	}
 
 

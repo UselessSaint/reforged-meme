@@ -34,6 +34,11 @@ public:
 
 	Matrix(int n, int m, initializer_list<T> list)
 	{
+		if (n < 0 || m < 0)
+		{
+			throw Matrix_size_error();
+		}
+
 		rows = n;
 		cols = m;
 
@@ -74,8 +79,6 @@ public:
 
 	~Matrix()
 	{
-		cout << "Here i'm boys and girls.";
-
 		for (int i = 0; i < rows; i++)
 		{
 			delete [] mtr[i];
@@ -83,17 +86,48 @@ public:
 		delete [] mtr;
 	}
 
-	void print()
+	void printRows()
 	{
 		auto it = this->beginRow();
 		auto end = this->end();
+		int counter = 0;
 
 		while (it != end)
 		{
 			cout << *it << " ";
 			++it;
+
+			if (counter == cols-1)
+			{
+				cout << endl;
+				counter = 0;
+			}
+			else
+				counter++;
 		}
-		cout << *end;
+		cout << *end << endl;
+	}
+
+	void printColumns()
+	{
+		auto it = this->beginColumn();
+		auto end = this->end();
+		int counter = 0;
+
+		while (it != end)
+		{
+			cout << *it << " ";
+			++it;
+
+			if (counter == rows-1)
+			{
+				cout << endl;
+				counter = 0;
+			}
+			else
+				counter++;
+		}
+		cout << *end << endl;
 	}
 
 	MatrixIteratorRow<T> beginRow()
@@ -106,7 +140,7 @@ public:
 		return MatrixIteratorColumn<T>(rows, cols, mtr);
 	}
 
-	MatrixIterator<T> end()
+	MatrixIteratorEnd<T> end()
 	{
 		return MatrixIteratorEnd<T>(rows, cols, mtr);
 	}
