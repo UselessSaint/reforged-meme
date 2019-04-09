@@ -35,24 +35,21 @@ def scalar_mult(power1, data1, power2, data2, weights):
     return result
 
 
-def solve_slay_gaus(mtr, left_side):
-    n = len(mtr) # in this problem we'r only have square matrix
+def solve_slay_gaus(left_side, right_side):
+    n = len(left_side)
     for i in range(0, n):
         for j in range(i+1, n):
-            sep = mtr[j][i] / mtr[i][i]
+            sep = left_side[j][i]/left_side[i][i]
             for k in range(0, n):
-                mtr[j][k] -= mtr[i][k] * sep
-            left_side[j] -= left_side[i] * sep
+                left_side[j][k] -= left_side[i][k] * sep
+            right_side[j] -= right_side[i] * sep
 
-    left_side[n-1] = left_side[n-1] / mtr[n-1][n-1]
-
-    for i in range(n-2, -1, -1):
+    for i in range(n-1, -1, -1):
         for k in range(i+1, n):
-            left_side[i] -= mtr[i][k] * left_side[k]
+            right_side[i] -= left_side[i][k] * right_side[k]
+        right_side[i] /= left_side[i][i]
 
-        left_side[i] /= mtr[i][i]
-
-    return left_side
+    return right_side
 
 
 def main():
