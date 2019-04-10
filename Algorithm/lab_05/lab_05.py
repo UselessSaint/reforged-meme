@@ -1,5 +1,5 @@
 from lab_01 import *
-from math import pow
+from math import pow, exp, log
 
 
 Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000,  20000,  22000,  24000,  26000],
@@ -67,6 +67,81 @@ def approximated_nt(t, p):
     return 7243*p/t
 
 
+def find_d_e(t, gamma, z_consts, i):
+    result = 8.61*pow(10, -5)*t
+    result *= log( (1+pow(z_consts[i+1], 2)*gamma/2) * (1+gamma/2) / (1+pow(z_consts[i], 2)*gamma/2))
+
+    return result
+
+
+def find_k_i(Q_data, t, e_consts, d_e, i):
+    result = 2*2.415*pow(10, -3)
+
+    Q_ip1 = interpolate_2_lists(t, 4, Q_data[0], Q_data[i+2])
+    Q_i = interpolate_2_lists(t, 4, Q_data[0], Q_data[i+1])
+
+    result *= Q_ip1/Q_i
+    result *= pow(t, 3/2)
+
+    result *= exp(-(e_consts[i]-d_e[i])*11603/t)
+
+    return result
+
+
+def find_gamma(t, gamma, X, z_consts):
+    result = 5.87*pow(10, 10)/pow(t, 3)
+
+    brackets = exp(X[0])/(1+gamma/2)
+    for i in range(2, 6):
+        brackets += (exp(X[i])*pow(z_consts[i-1], 2)) / (1+pow(z_consts[i-1], 2)*gamma/2)
+
+    result *= brackets
+
+    return result
+
+
+def nt(t, p, Q_data, Eps):
+    gamma = 0
+    e_consts = [12.13, 20.98, 31.00, 45.00]
+    z_consts = [0, 1, 2, 3, 4]
+    X = [-1, 3, -1, -20, -20, -20]
+
+    for i in range(3):
+        gamma = find_gamma(t, gamma, X, z_consts)
+        d_e = [find_d_e(t, gamma, z_consts, i) for i in range(0, 4)]
+        K = [find_k_i(Q_data, t, e_consts, d_e, i) for i in range(0, 4)]
+
+        lin_sys_left_side = [[1, -1, 1, 0, 0, 0],
+                             [1, 0, -1, 1, 0, 0],
+                             [1, 0, 0, -1, 1, 0],
+                             [1, 0, 0, 0, -1, 1],
+                             [exp(X[0])] + [-z_consts[i-1]*exp(X[i]) for i in range(1, 6)],
+                             [exp(X[0])] + [exp(X[i]) for i in range(1, 6)]]
+
+        print(gamma)
+        alpha = 0.285*pow(10, -11)*pow(gamma*t, 3)
+
+        lin_sys_right_side = [log(K[0]) + X[1] - X[2] - X[0],
+                              log(K[1]) + X[2] - X[3] - X[0],
+                              log(K[2]) + X[3] - X[4] - X[0],
+                              log(K[3]) + X[4] - X[5] - X[0],
+                              sum([z_consts[i-1]*exp(X[i]) for i in range(1, 6)]) - exp(X[0]),
+                              sum([exp(X[i]) for i in range(1, 6)]) + exp(X[0]) - 7243*p/t - alpha]
+
+        d_X = solve_lin_system_gauss(lin_sys_left_side, lin_sys_right_side)
+        X = d_X # X = [X[i] + d_X[i] for i in range(len(d_X))]
+
+    print(X)
+    print("------")
+    print(d_X)
+    print("------")
+    print(d_e)
+    print("------")
+    print(K)
+    print("------")
+    [print(i) for i in lin_sys_left_side]
+
+
 def main():
     global Q_data, P_min, P_max, Eps
 
@@ -75,18 +150,20 @@ def main():
     Tw = 2000  # float(input("Tw: "))
     m = 0  # float(input("m: "))
 
-    while abs(P_max - P_min) > Eps:
-        curr_p = abs(P_max - P_min) / 2.0
-        curr_p += P_min
+    nt(T0, 1, Q_data, Eps)
 
-        integral_value = integrate(0, 1, lambda z: approximated_nt(t(z, T0, Tw, m), curr_p)*z)
-
-        if (approximated_nt(T0, P0) - 2*integral_value) >= 0:
-            P_min = curr_p
-        else:
-            P_max = curr_p
-
-    print("Result: ", P_max)
+    # while abs(P_max - P_min) > Eps:
+    #     curr_p = abs(P_max - P_min) / 2.0
+    #     curr_p += P_min
+    #
+    #     integral_value = integrate(0, 1, lambda z: approximated_nt(t(z, T0, Tw, m), curr_p)*z)
+    #
+    #     if (approximated_nt(T0, P0) - 2*integral_value) >= 0:
+    #         P_min = curr_p
+    #     else:
+    #         P_max = curr_p
+    #
+    # print("Result: ", P_max)
 
 
 if __name__ == '__main__':
