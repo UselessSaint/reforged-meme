@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93976e54-9f29-4617-b9df-a0778b673695" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lab_05_old.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab_05.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab_05.py" afterDir="false" />
     </list>
@@ -12,34 +13,76 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lab_05.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="127" column="76" selection-start-line="127" selection-start-column="76" selection-end-line="127" selection-end-column="76" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#830#1287#0" />
-                <element signature="e#1339#1574#0" />
-                <element signature="e#1615#1809#0" />
-                <element signature="e#1837#1868#0" />
-                <element signature="e#1961#2111#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lab_01.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2020">
-              <caret line="101" column="16" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.4373024">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lab_01.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1340">
+                  <caret line="67" column="29" selection-start-line="67" selection-start-column="29" selection-end-line="67" selection-end-column="29" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lab_05_old.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="541">
+                  <caret line="147" lean-forward="true" selection-start-line="147" selection-end-line="147" />
+                  <folding>
+                    <element signature="e#0#20#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa0.513/computational_algorithms-master/lab_05/lab_05.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="267">
+                  <caret line="153" column="9" lean-forward="true" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lab_05.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <folding>
+                    <element signature="e#0#20#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lab_05.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="220">
+                  <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+                  <folding>
+                    <element signature="e#0#20#0" expanded="true" />
+                    <element signature="e#886#1343#0" />
+                    <element signature="e#1394#1629#0" />
+                    <element signature="e#1671#1865#0" />
+                    <element signature="e#1902#1917#0" />
+                    <element signature="e#1945#1975#0" />
+                    <element signature="e#2065#2296#0" />
+                    <element signature="e#2328#2374#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -61,6 +104,9 @@
       <list>
         <option value="$PROJECT_DIR$/../lab_04/main.py" />
         <option value="$PROJECT_DIR$/lab_01.py" />
+        <option value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.202/computational_algorithms-master/lab_05/lab_05.py" />
+        <option value="$PROJECT_DIR$/lab_05_old.py" />
+        <option value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.513/computational_algorithms-master/lab_05/lab_05.py" />
         <option value="$PROJECT_DIR$/lab_05.py" />
       </list>
     </option>
@@ -78,7 +124,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -90,6 +135,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="RecentsManager">
@@ -110,6 +156,48 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.lab_05">
+    <configuration name="lab_05 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="lab_05" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.202/computational_algorithms-master/lab_05" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.202/computational_algorithms-master/lab_05/lab_05.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lab_05 (2)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="lab_05" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.513/computational_algorithms-master/lab_05" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/AppData/Local/Temp/Rar$DRa0.513/computational_algorithms-master/lab_05/lab_05.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="lab_05" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="lab_05" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,6 +211,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lab_05.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lab_05_old" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="lab_05" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lab_05_old.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -155,6 +264,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.lab_05" />
+        <item itemvalue="Python.lab_05 (2)" />
+        <item itemvalue="Python.lab_05_old" />
+        <item itemvalue="Python.lab_05 (1)" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -176,12 +288,12 @@
     <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.39636752" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2260274" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.25382933" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32166302" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -189,7 +301,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32827735" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32719395" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -218,25 +330,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lab_05.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa0.202/computational_algorithms-master/lab_05/lab_05.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="127" column="76" selection-start-line="127" selection-start-column="76" selection-end-line="127" selection-end-column="76" />
+        <state relative-caret-position="280">
+          <caret line="110" selection-start-line="110" selection-end-line="110" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#830#1287#0" />
-            <element signature="e#1339#1574#0" />
-            <element signature="e#1615#1809#0" />
-            <element signature="e#1837#1868#0" />
-            <element signature="e#1961#2111#0" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lab_01.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2020">
-          <caret line="101" column="16" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
+        <state relative-caret-position="1340">
+          <caret line="67" column="29" selection-start-line="67" selection-start-column="29" selection-end-line="67" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DRa0.513/computational_algorithms-master/lab_05/lab_05.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="153" column="9" lean-forward="true" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab_05_old.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="541">
+          <caret line="147" lean-forward="true" selection-start-line="147" selection-end-line="147" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab_05.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#886#1343#0" />
+            <element signature="e#1394#1629#0" />
+            <element signature="e#1671#1865#0" />
+            <element signature="e#1902#1917#0" />
+            <element signature="e#1945#1975#0" />
+            <element signature="e#2065#2296#0" />
+            <element signature="e#2328#2374#0" />
+          </folding>
         </state>
       </provider>
     </entry>

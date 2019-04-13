@@ -1,5 +1,6 @@
 from lab_01 import *
-from math import pow, exp, log
+from math import pow, exp, log, sqrt, isnan
+# from scipy.optimize import bisect
 
 
 Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000,  20000,  22000,  24000,  26000],
@@ -11,7 +12,10 @@ Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000
 
 P_min = 0
 P_max = 20
-Eps = 1e-10
+Eps = 1e-1
+
+Z_c = [0, 1, 2, 3, 4]
+E_c = [12.13, 20.98, 31.00, 45.00]
 
 
 def solve_lin_system_gauss(left_side, right_side):
@@ -59,113 +63,123 @@ def integrate(st, end, function):
     return round(result, 4)
 
 
-def t(z, t0, tw, m):
-    return t0 + (tw - t0)*pow(z, m)
+def approximated_Nt(T, P):
+    return 7243*P/T
 
 
-def approximated_nt(t, p):
-    return 7243*p/t
+def t(z, T0, Tw, m):
+    return T0 + (Tw - T0)*pow(z, m)
 
 
-def find_d_e(t, gamma, z_consts, i):
-    result = 8.61*pow(10, -5)*t
-    result *= log( (1+pow(z_consts[i+1], 2)*gamma/2) * (1+gamma/2) / (1+pow(z_consts[i], 2)*gamma/2))
+def find_d_e(T, gamma):
+    d_e = list()
 
-    return result
+    for i in range(4):
+        d_e_i = 8.61*pow(10, -5)*T
+        d_e_i *= log((1 + Z_c[i+1]*Z_c[i+1]*gamma/2) * (1+gamma/2) /
+                     (1+Z_c[i]*Z_c[i]*gamma/2))
 
+        d_e.append(d_e_i)
 
-def find_k_i(Q_data, t, e_consts, d_e, i):
-    result = 2*2.415*pow(10, -3)
-
-    Q_ip1 = interpolate_2_lists(t, 4, Q_data[0], Q_data[i+2])
-    Q_i = interpolate_2_lists(t, 4, Q_data[0], Q_data[i+1])
-
-    result *= Q_ip1/Q_i
-    result *= pow(t, 3/2)
-
-    result *= exp(-(e_consts[i]-d_e[i])*11603/t)
-
-    return result
+    return d_e
 
 
-def find_gamma(t, gamma, X, z_consts):
-    result = 5.87*pow(10, 10)/pow(t, 3)
+def find_K(T, d_e):
+    K = list()
 
-    brackets = exp(X[0])/(1+gamma/2)
+    for i in range(4):
+        Q_ip1 = interpolate_2_lists(T, 4, Q_data[0], Q_data[i+2])
+        Q_i = interpolate_2_lists(T, 4, Q_data[0], Q_data[i+1])
+
+        K_i = 2*2.415*pow(10, -3) * (Q_ip1/Q_i) * pow(T, 3/2) * exp(-(E_c[i]-d_e[i])*11603/T)
+
+        K.append(K_i)
+
+    return K
+
+
+def gamma_func(gamma, T, X):
+    right_part = X[0]/(1+gamma/2)
+
     for i in range(2, 6):
-        brackets += (exp(X[i])*pow(z_consts[i-1], 2)) / (1+pow(z_consts[i-1], 2)*gamma/2)
+        right_part += ((exp(X[i])*Z_c[i-1]*Z_c[i-1]) /
+                       (1+Z_c[i-1]*Z_c[i-1]*gamma/2))
 
-    result *= brackets
+    right_part *= 5.87*pow(10, 10)/pow(T, 3)
+    # print(right_part)
+    return gamma*gamma - right_part
 
-    return result
+
+def find_gamma(st, end, T, X):
+    while abs(st-end) > Eps:
+        cur_gamma = (st+end)/2
+
+        if gamma_func(cur_gamma, T, X) <= 0:
+            st = cur_gamma
+        else:
+            end = cur_gamma
+    # print("Root?:", gamma_func(st, T, X))
+    return (st+end)/2
 
 
-def nt(t, p, Q_data, Eps):
-    gamma = 0
-    e_consts = [12.13, 20.98, 31.00, 45.00]
-    z_consts = [0, 1, 2, 3, 4]
+def find_max_increment(X, d_X):
+    max_inc = abs(d_X[0]/X[0])
+    for i in range(1, len(X)):
+        if abs(d_X[i]/X[i]) > max_inc:
+            max_inc = abs(d_X[i]/X[i])
+    return max_inc
+
+
+def Nt(T, P):
     X = [-1, 3, -1, -20, -20, -20]
+    gamma = 0
 
-    for i in range(3):
-        gamma = find_gamma(t, gamma, X, z_consts)
-        d_e = [find_d_e(t, gamma, z_consts, i) for i in range(0, 4)]
-        K = [find_k_i(Q_data, t, e_consts, d_e, i) for i in range(0, 4)]
+    while True:
+        d_e = find_d_e(T, gamma)
+        K = find_K(T, d_e)
+        gamma = find_gamma(0, 5, T, X)
+        # print(gamma)
 
         lin_sys_left_side = [[1, -1, 1, 0, 0, 0],
                              [1, 0, -1, 1, 0, 0],
                              [1, 0, 0, -1, 1, 0],
                              [1, 0, 0, 0, -1, 1],
-                             [exp(X[0])] + [-z_consts[i-1]*exp(X[i]) for i in range(1, 6)],
-                             [exp(X[0])] + [exp(X[i]) for i in range(1, 6)]]
+            [exp(X[0]), 0, -Z_c[1]*exp(X[2]), -Z_c[2]*exp(X[3]), -Z_c[3]*exp(X[4]), -Z_c[4]*exp(X[5])],
+                             [exp(X[0]), exp(X[1]), exp(X[2]), exp(X[3]), exp(X[4]), exp(X[5])]]
 
-        print(gamma)
-        alpha = 0.285*pow(10, -11)*pow(gamma*t, 3)
+        alpha = 0.285*pow(10, -11)*pow(gamma*T, 3)
 
-        lin_sys_right_side = [log(K[0]) + X[1] - X[2] - X[0],
-                              log(K[1]) + X[2] - X[3] - X[0],
-                              log(K[2]) + X[3] - X[4] - X[0],
-                              log(K[3]) + X[4] - X[5] - X[0],
-                              sum([z_consts[i-1]*exp(X[i]) for i in range(1, 6)]) - exp(X[0]),
-                              sum([exp(X[i]) for i in range(1, 6)]) + exp(X[0]) - 7243*p/t - alpha]
+        lin_sys_right_side = [log(K[0])+X[1]-X[2]-X[0],
+                              log(K[1])+X[2]-X[3]-X[0],
+                              log(K[2])+X[3]-X[4]-X[0],
+                              log(K[3])+X[4]-X[5]-X[0],
+                              Z_c[1]*exp(X[2])+Z_c[2]*exp(X[3])+Z_c[3]*exp(X[4])+Z_c[4]*exp(X[5])-exp(X[0]),
+                              exp(X[0])+exp(X[1])+exp(X[2])+exp(X[3])+exp(X[4])+exp(X[5])-alpha-P*7243/T]
 
         d_X = solve_lin_system_gauss(lin_sys_left_side, lin_sys_right_side)
-        X = d_X # X = [X[i] + d_X[i] for i in range(len(d_X))]
 
-    print(X)
-    print("------")
-    print(d_X)
-    print("------")
-    print(d_e)
-    print("------")
-    print(K)
-    print("------")
-    [print(i) for i in lin_sys_left_side]
+        # print(find_max_increment(X, d_X))
+        if find_max_increment(X, d_X) < Eps:
+            break
+
+        for i in range(len(X)):
+            X[i] += d_X[i]
+
+    return X
 
 
 def main():
-    global Q_data, P_min, P_max, Eps
+    # print(Nt(15000, 1))
+    # res = Nt(t(1, 15000, 2000, 0), 1)
+    # print([exp(i) for i in res])
+    # X = [-1, 3, -1, -20, -20, -20]
+    # i = -10
+    # while i < 10:
+    #     if i == 2:
+    #         continue
+    #     print(i, gamma_func(i, 1000, X))
+    #     i += 0.1
+    # print(find_gamma(-10, 10, 1000, X))
 
-    P0 = 1  # float(input("P0: "))
-    T0 = 1000  # float(input("T0: "))
-    Tw = 2000  # float(input("Tw: "))
-    m = 0  # float(input("m: "))
-
-    nt(T0, 1, Q_data, Eps)
-
-    # while abs(P_max - P_min) > Eps:
-    #     curr_p = abs(P_max - P_min) / 2.0
-    #     curr_p += P_min
-    #
-    #     integral_value = integrate(0, 1, lambda z: approximated_nt(t(z, T0, Tw, m), curr_p)*z)
-    #
-    #     if (approximated_nt(T0, P0) - 2*integral_value) >= 0:
-    #         P_min = curr_p
-    #     else:
-    #         P_max = curr_p
-    #
-    # print("Result: ", P_max)
-
-
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
-
