@@ -4,108 +4,150 @@
 #include "includes.h"
 
 template <typename T>
-class MatrixIterator
+class MatrixIteratorBase
 {
 protected:
-	//int rows = 0, cols = 0;
-	T* cur_elem = nullptr;
-	//T **mtr = nullptr;
+	T* cur_item = nullptr;
 public:
-	virtual bool operator ==(const MatrixIterator& second)
+	bool operator ==(const MatrixIteratorBase& second)
 	{
-		return cur_elem == second.cur_elem;
+		return cur_item == second.cur_item;
 	}
 
-	virtual bool operator !=(const MatrixIterator& second)
+	bool operator !=(const MatrixIteratorBase& second)
 	{
-		return cur_elem != second.cur_elem;
+		return !(cur_item == second.cur_item);
 	}
 
-	virtual T& operator *()
+	T& operator *()
 	{
-		return *cur_elem;
+		return *cur_item;
 	}
 };
 
 template <typename T>
-class MatrixIteratorRow: virtual public MatrixIterator<T>
+class MatrixIteratorRow: public MatrixIteratorBase<T>
 {
-private:
-	//int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
-	int rows = 0, cols = 0;
-	T** mtr = nullptr; //MatrixIterator<T>::mtr;
-	int cur_row = 0, cur_col = 0;
 public:
-	MatrixIteratorRow(int n, int m, T** matrix)
+	MatrixIteratorRow(T* item)
 	{
-		rows = n;
-		cols = m;
-		mtr = matrix;
-
-		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
+		setCurItem(item);
 	}
 
-	MatrixIteratorRow& operator ++()
+	~MatrixIteratorRow() {}
+
+	MatrixIteratorRow& operator++()
 	{
-		if (cur_col == cols-1)
-		{
-			cur_col = 0;
-			cur_row++;
-		}
-		else
-		{
-			cur_col++;
-		}
-		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
+		T* item = getCurItem();
+		item++;
+		setCurItem(item);
+
 		return *this;
 	}
+
+	MatrixIteratorRow operator++(int)
+	{
+		auto old_it = MatrixIteratorRow(getCurItem());
+
+		T* item = getCurItem();
+		item++;
+		setCurItem(item);
+
+		return old_it;
+	}
+
+	void setCurItem(T* item)
+	{
+		MatrixIteratorBase<T>::cur_item = item;
+	}
+
+	T* getCurItem()
+	{
+		return MatrixIteratorBase<T>::cur_item;
+	}
 };
 
 template <typename T>
-class MatrixIteratorColumn: virtual public MatrixIterator<T>
+class MatrixIteratorColumn: public MatrixIteratorBase<T>
 {
 private:
-	//int& rows = MatrixIterator<T>::rows, cols = MatrixIterator<T>::cols;
-	int rows = 0, cols = 0;
-	T** mtr = nullptr; //MatrixIterator<T>::mtr;
 	int cur_row = 0, cur_col = 0;
+	int rows = 0, cols = 0;
+	T* mtr_p = nullptr;
 public:
-	MatrixIteratorColumn(int n, int m, T** matrix)
+	MatrixIteratorColumn(T* item, int row, int col, int rows_total, int cols_total)
 	{
-		rows = n;
-		cols = m;
-		mtr = matrix;
+		mtr_p = item;
+		setCurItem(mtr_p+(cur_row*cols + cur_col));
 
-		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
+		cur_row = row;
+		cur_col = col;
+
+		rows = rows_total;
+		cols = cols_total;
 	}
 
-	MatrixIteratorColumn& operator ++()
+	~MatrixIteratorColumn() {}
+
+	MatrixIteratorColumn& operator++()
 	{
-		if (cur_row == rows-1)
+		if (cur_col == cols - 1 && cur_row == rows - 1)
+		{
+			setCurItem(mtr_p + (rows-1)*cols + cols);
+		}
+		else if (cur_row == rows - 1)
 		{
 			cur_row = 0;
 			cur_col++;
+
+			setCurItem(mtr_p + (cur_row*cols + cur_col));
 		}
 		else
 		{
 			cur_row++;
+			setCurItem(mtr_p + (cur_row*cols + cur_col));
 		}
-		MatrixIterator<T>::cur_elem = &(mtr[cur_row][cur_col]);
+
 		return *this;
+	}
+
+	MatrixIteratorColumn operator++(int)
+	{
+		auto old_it = MatrixIteratorColumn(mtr_p, cur_row, cur_col, rows, cols);
+
+		++(*this);
+
+		return old_it;
+	}
+
+	void setCurItem(T* item)
+	{
+		MatrixIteratorBase<T>::cur_item = item;
+	}
+
+	T* getCurItem()
+	{
+		return MatrixIteratorBase<T>::cur_item;
 	}
 };
 
-template  <typename T>
-class MatrixIteratorEnd: virtual public MatrixIterator<T>
+template <typename T>
+class MatrixIteratorEnd: public MatrixIteratorBase<T>
 {
 private:
-	T** mtr = nullptr;// MatrixIterator<T>::mtr;
+	int rows = 0, cols = 0;
 public:
-	MatrixIteratorEnd(int n, int m, T** matrix)
+	MatrixIteratorEnd(T* mtr, int rows_total, int cols_total)
 	{
-		mtr = matrix;
+		rows = rows_total;
+		cols = cols_total;
 
-		MatrixIterator<T>::cur_elem = &(mtr[n-1][m-1]);
+		setCurItem(mtr + (rows-1)*cols + cols);
+	}
+
+	void setCurItem(T* item)
+	{
+		MatrixIteratorBase<T>::cur_item = item;
 	}
 };
 

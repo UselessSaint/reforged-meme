@@ -3,7 +3,16 @@
 
 #include "includes.h"
 
-class Matrix_size_error: public exception
+class MatrixErrorBase: public exception
+{
+public:
+	virtual const char* what() const noexcept
+	{
+		return "Matrix error was catched";
+	}
+};
+
+class MatrixSizeError: public MatrixErrorBase
 {
 public:
 	const char* what() const noexcept
@@ -12,12 +21,48 @@ public:
 	}
 };
 
-class Matrix_initializer_error: public exception
+class MatrixIndexError: public MatrixErrorBase
 {
 public:
 	const char* what() const noexcept
 	{
-		return "You are trying to initialize more values than the matrix can hold";
+		return "Incorrect indices";
+	}
+};
+
+class MatrixAdditionError: public MatrixErrorBase
+{
+public:
+	const char* what() const noexcept
+	{
+		return "Incorrect addition sizes";
+	}
+};
+
+class MatrixDetError: public MatrixErrorBase
+{
+public:
+	const char* what() const noexcept
+	{
+		return "Cols != Rows";
+	}
+};
+
+class MatrixInverseError: public MatrixErrorBase
+{
+public:
+	const char* what() const noexcept
+	{
+		return "Degenerate matrix";
+	}
+};
+
+class MatrixMultiplicationError: public MatrixErrorBase
+{
+public:
+	const char* what() const noexcept
+	{
+		return "Incorrect multiplication sizes";
 	}
 };
 
