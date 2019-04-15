@@ -35,7 +35,7 @@ public:
 
 	~MatrixRow() {}
 
-	T& operator[](int n)
+	T& operator[](int n) const
 	{
 		if (n < 0 || n > cols)
 		{
@@ -116,8 +116,8 @@ public:
 	}
 
 	~Matrix() { delete [] copy; }
-
-	MatrixRow<T> operator [](int row)
+	
+	MatrixRow<T> operator [](int row) const
 	{
 		if (row < 0 || row > getRow())
 		{
@@ -126,7 +126,7 @@ public:
 		return MatrixRow<T>(getColumn(), &(copy[row*getColumn()]));
 	}
 
-	Matrix<T> operator +(Matrix<T> &second)
+	Matrix<T> operator +(const Matrix<T> &second)
 	{
 		if (second.getRow() != getRow() || second.getColumn() != getColumn())
 		{
@@ -150,6 +150,36 @@ public:
 
 		return result;
 	}
+	
+	bool operator ==(const Matrix<T>& other)
+	{
+		bool result = true;
+		
+		if (getRow() != other.getRow() && getColumn() != other.getColumn())
+		{
+			result = false;
+		}
+		else
+		{
+			auto it = beginRow();
+			auto o_it = other.beginRow();
+			
+			for (; it != end(); it++)
+			{
+				if (*it != *o_it)
+				{
+					result = false;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	bool operator !=(const Matrix<T>& other)
+	{
+		return !(*this == other);
+	}
 
 	Matrix<T>& operator =(const Matrix<T>& other)
 	{
@@ -166,7 +196,7 @@ public:
 		return *this;
 	}
 
-	Matrix<T>& operator +=(Matrix<T>& other)
+	Matrix<T>& operator +=(const Matrix<T>& other)
 	{
 		if (other.getRow() != getRow() || other.getColumn() != getColumn())
 		{
@@ -188,7 +218,7 @@ public:
 		return *this;
 	}
 
-	Matrix<T> operator *(Matrix<T> &other)
+	Matrix<T> operator *(const Matrix<T>& other)
 	{
 		if (getColumn() != other.getRow())
 		{
@@ -211,7 +241,7 @@ public:
 		return result;
 	}
 
-	Matrix<T>& operator *=(Matrix<T>& other)
+	Matrix<T>& operator *=(const Matrix<T>& other)
 	{
 		(*this) = (*this) * other;
 
@@ -355,7 +385,17 @@ public:
 		return unit_m;
 	}
 
-	void printRow()
+	void clear()
+	{
+		auto it = beginRow();
+		
+		for (;it != end(); it++)
+		{
+			*it = 0;
+		}
+	}
+	
+	void printRows()
 	{
 		int i = 0;
 		for (auto it = this->beginRow(); it != this->end(); it++)
@@ -373,7 +413,7 @@ public:
 		}
 	}
 
-	void printColumn()
+	void printColumns()
 	{
 		int i = 0;
 		for (auto it = this->beginColumn(); it != this->end(); ++it)
@@ -391,17 +431,17 @@ public:
 		}
 	}
 
-	MatrixIteratorRow<T> beginRow()
+	MatrixIteratorRow<T> beginRow() const
 	{
 		return MatrixIteratorRow<T>(copy);
 	}
 
-	MatrixIteratorColumn<T> beginColumn()
+	MatrixIteratorColumn<T> beginColumn() const
 	{
 		return MatrixIteratorColumn<T>(copy, 0, 0, getRow(), getColumn());
 	}
 
-	MatrixIteratorEnd<T> end()
+	MatrixIteratorEnd<T> end() const
 	{
 		return MatrixIteratorEnd<T>(copy, getRow(), getColumn());
 	}
