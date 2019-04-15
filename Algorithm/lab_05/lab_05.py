@@ -1,5 +1,6 @@
 from lab_01 import *
 from math import pow, exp, log, sqrt, isnan
+from scipy.optimize import *
 # from scipy.optimize import bisect
 
 
@@ -10,8 +11,8 @@ Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000
           [11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000, 11.000],
           [15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000, 15.000]]
 
-P_min = 0
-P_max = 20
+P_mind = 0
+P_maxd = 20
 Eps = 1e-1
 
 Z_c = [0, 1, 2, 3, 4]
@@ -99,27 +100,35 @@ def find_K(T, d_e):
 
 
 def gamma_func(gamma, T, X):
-    right_part = X[0]/(1+gamma/2)
-
+    sum = 0
     for i in range(2, 6):
-        right_part += ((exp(X[i])*Z_c[i-1]*Z_c[i-1]) /
-                       (1+Z_c[i-1]*Z_c[i-1]*gamma/2))
+        print(X[i])
+        sum += (exp(X[i])*Z_c[i-1]**2)/(1+Z_c[i-1]**2*gamma/2)
 
-    right_part *= 5.87*pow(10, 10)/pow(T, 3)
-    # print(right_part)
-    return gamma*gamma - right_part
+    return gamma**2-5.87*1e+10/T**3*(exp(X[0])/(1+gamma/2)+sum)
+    # right_part = X[0]/(1+gamma/2)
+    #
+    # for i in range(2, 6):
+    #     right_part += ((exp(X[i])*Z_c[i-1]*Z_c[i-1]) /
+    #                    (1+Z_c[i-1]*Z_c[i-1]*gamma/2))
+    #
+    # right_part *= 5.87*pow(10, 10)/pow(T, 3)
+    # # print(right_part)
+    # return gamma*gamma - right_part
 
 
 def find_gamma(st, end, T, X):
-    while abs(st-end) > Eps:
-        cur_gamma = (st+end)/2
+    # while abs(st-end) > Eps:
+    #     cur_gamma = (st+end)/2
+    #
+    #     if gamma_func(cur_gamma, T, X) <= 0:
+    #         st = cur_gamma
+    #     else:
+    #         end = cur_gamma
+    #
+    # return (st+end)/2
 
-        if gamma_func(cur_gamma, T, X) <= 0:
-            st = cur_gamma
-        else:
-            end = cur_gamma
-    # print("Root?:", gamma_func(st, T, X))
-    return (st+end)/2
+    return bisect(gamma_func, st, end, args=(T, X), xtol=Eps)
 
 
 def find_max_increment(X, d_X):
@@ -165,21 +174,40 @@ def Nt(T, P):
         for i in range(len(X)):
             X[i] += d_X[i]
 
-    return X
+    print(sum([exp(i) for i in X]))
+    return sum([exp(i) for i in X])
 
 
 def main():
-    # print(Nt(15000, 1))
-    # res = Nt(t(1, 15000, 2000, 0), 1)
-    # print([exp(i) for i in res])
-    # X = [-1, 3, -1, -20, -20, -20]
-    # i = -10
-    # while i < 10:
-    #     if i == 2:
-    #         continue
-    #     print(i, gamma_func(i, 1000, X))
-    #     i += 0.1
-    # print(find_gamma(-10, 10, 1000, X))
+    # lower_P = P_min
+    # upper_P = P_max
+
+    # print(approximated_Nt(1000, 1) - 2*integrate(0, 1, lambda z: Nt(t(z, 1000, 2000, 0), 2)*z))
+
+    # P_max = P_maxd
+    # P_min = P_mind
+    #
+    P0 = 1  # float(input("P0: "))
+    T0 = 1000  # float(input("T0: "))
+    Tw = 2000  # float(input("Tw: "))
+    m = 0  # float(input("m: "))
+
+    print("----", approximated_Nt(T0, P0)-2*integrate(0, 1, lambda z: approximated_Nt(t(z, T0, Tw, m), 2)*z))
+
+    #
+    # while abs(P_max - P_min)  > Eps:
+    #     curr_p = abs(P_max-P_min)/2.0
+    #     curr_p+=P_min
+    #
+    #     integral_value=integrate(0, 1, lambda z: Nt(t(z, T0, Tw, m), curr_p)*z)
+    #
+    #     if (approximated_Nt(T0, P0)-2*integral_value) >= 0:
+    #         P_min = curr_p
+    #     else:
+    #         P_max = curr_p
+    #
+    # print("Result: ", P_max)
+
 
 if __name__=='__main__':
     main()
