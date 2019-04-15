@@ -1,5 +1,5 @@
 from tkinter import *
-import math
+from math import cos, sin, pi, sqrt
 from tkinter import messagebox as mb
 import numpy
 
@@ -7,7 +7,7 @@ import numpy
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("770x585")
+        self.geometry("770x610")
         self.resizable(False, False)
 
         self.radius_entry = None
@@ -22,6 +22,9 @@ class GUI(Tk):
 
         self.param_frame = Frame(self, bd=2, relief="groove")
         self.param_frame.grid(row=0, column=0, sticky=W, pady=10, padx=10)
+
+        self.cir_step_entry = None
+        self.el_step_entry = None
 
         self.__create_params_entry()
         self.__create_color_rb()
@@ -80,10 +83,10 @@ class GUI(Tk):
         method_label.pack()
 
         self.methods = [("Библиотечный", self.__bib_method_crs, self.__bib_method_ell),
-                        ("Брезенхэма", None),
-                        ("Средней точки", None),
-                        ("Каноническое уравнение", None),
-                        ("Параметричекое уравнение", None)]
+                        ("Брезенхэма", self.__brez_c, self.__brez_e),
+                        ("Средней точки", self.__mid_p_c, self.__mid_p_e),
+                        ("Каноническое уравнение", self.__canon_c, self.__canon_e),
+                        ("Параметричекое уравнение", self.__param_c, self.__param_e)]
 
         for i in range(len(self.methods)):
             rb = Radiobutton(method_rb_frame, text=self.methods[i][0], value=i, variable=self.method_rb)
@@ -99,11 +102,18 @@ class GUI(Tk):
         cmp_button_e = Button(draw_n_cmp_frame, text="Сравнить эллписы", command=self.__compare_e)
         clear_button = Button(draw_n_cmp_frame, text="Очистить", command=self.__clear)
 
-        draw_circle.pack(pady=2)
-        cmp_button_c.pack(pady=2)
-        draw_ellipse.pack(pady=2)
-        cmp_button_e.pack(pady=2)
-        clear_button.pack(pady=2)
+        self.cir_step_entry = Entry(draw_n_cmp_frame, width=5)
+        self.el_step_entry = Entry(draw_n_cmp_frame, width=5)
+
+        draw_circle.grid(row=0, column=0, columnspan=2, padx=10)
+        Label(draw_n_cmp_frame, text="Шаг: ").grid(row=1, column=0, padx=10)
+        self.cir_step_entry.grid(row=1, column=1, padx=10)
+        cmp_button_c.grid(row=2, column=0, columnspan=2, padx=10)
+        draw_ellipse.grid(row=3, column=0, columnspan=2, padx=10)
+        Label(draw_n_cmp_frame, text="Шаг: ").grid(row=4, column=0, padx=10)
+        self.el_step_entry.grid(row=4, column=1, padx=10)
+        cmp_button_e.grid(row=5, column=0, columnspan=2, padx=10)
+        clear_button.grid(row=6, column=0, columnspan=2, padx=10)
 
     def __create_canvas(self):
         canvas_frame = Frame(self)
@@ -138,17 +148,125 @@ class GUI(Tk):
         self.canvas.create_oval(xc-radius, yc-radius, xc+radius, yc+radius, outline=color)
 
     def __compare_c(self):
-        self.__clear()
-
         color = self.colors[self.color_rb.get()][1]
         method = self.methods[self.method_rb.get()][1]
-        radius = 10
+        try:
+            radius = int(self.radius_entry.get())
 
-        xc, yc = self.canvas_size/2, self.canvas_size/2
+            xc, yc = self.canvas_size/2, self.canvas_size/2
 
-        for i in range(17):
-            method(radius, xc, yc, color)
-            radius += 20
+            while radius < self.canvas_size/2:
+                method(radius, xc, yc, color)
+                radius += int(self.cir_step_entry.get())
+
+        except ValueError:
+            return
+
+    def __param_c(self, r, xc, yc, color):
+        try:
+            r = int(r)
+        except ValueError:
+            return
+
+        l = round(pi*r/2)
+
+        for i in range(0, l+1, 1):
+            fi = i/r
+            x = round(r*cos(fi))
+            y = round(r*sin(fi))
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+    def __canon_c(self, r, xc, yc, color):
+        try:
+            r = int(r)
+        except ValueError:
+            return
+
+        for x in range(0, round(r/sqrt(2)), 1):
+            y = sqrt(r*r - x*x)
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+            self.canvas.create_oval(xc+y, yc+x, xc+y, yc+x, outline=color)
+            self.canvas.create_oval(xc-y, yc+x, xc-y, yc+x, outline=color)
+            self.canvas.create_oval(xc+y, yc-x, xc+y, yc-x, outline=color)
+            self.canvas.create_oval(xc-y, yc-x, xc-y, yc-x, outline=color)
+
+    def __mid_p_c(self, r, xc, yc, color):
+        try:
+            r = int(r)
+        except ValueError:
+            return
+
+        x, y = 0, r
+        d = 5/4 - r
+
+        while x <= y:
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+            self.canvas.create_oval(xc+y, yc+x, xc+y, yc+x, outline=color)
+            self.canvas.create_oval(xc-y, yc+x, xc-y, yc+x, outline=color)
+            self.canvas.create_oval(xc+y, yc-x, xc+y, yc-x, outline=color)
+            self.canvas.create_oval(xc-y, yc-x, xc-y, yc-x, outline=color)
+
+            x += 1
+
+            if d < 0:
+                d += 2*x + 1
+            else:
+                d += 2*x - 2*y + 5
+                y -= 1
+
+    def __brez_c(self, r, xc, yc, color):
+        try:
+            r = int(r)
+        except ValueError:
+            return
+
+        x = 0
+        y = r
+
+        di = 2 - 2*r
+        y_end = 0
+
+        while y >= y_end:
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+            if di < 0:
+                b = 2*di + 2*y -1
+                x += 1
+
+                if b < 0:
+                    di += 2*x + 1
+                else:
+                    y -= 1
+                    di += 2*x - 2*y + 2
+
+            elif di > 0:
+                b = 2*di - 2*x - 1
+                y -= 1
+
+                if b <= 0:
+                    x += 1
+                    di += 2*x - 2*y + 2
+                else:
+                    di = di - 2*y + 1
+            else:
+                x += 1
+                y -= 1
+                di += 2*x - 2*y + 2
+
 # ------------------------------------
 
     def __draw_ell(self):
@@ -173,18 +291,148 @@ class GUI(Tk):
         self.canvas.create_oval(xc-ox, yc-oy, xc+ox, yc+oy, outline=color)
 
     def __compare_e(self):
-        self.__clear()
+        try:
+            color = self.colors[self.color_rb.get()][1]
+            method = self.methods[self.method_rb.get()][2]
 
-        color = self.colors[self.color_rb.get()][1]
-        method = self.methods[self.method_rb.get()][2]
-        ox, oy = 10, 30
+            ox, oy = int(self.ellipse_x_entry.get()), int(self.ellipse_y_entry.get())
 
-        xc, yc = self.canvas_size/2, self.canvas_size/2
+            xc, yc = self.canvas_size/2, self.canvas_size/2
 
-        for i in range(10):
-            method(ox, oy, xc, yc, color)
-            ox += 20
-            oy += 20
+            while (ox < self.canvas_size/2) and (oy < self.canvas_size/2):
+                method(ox, oy, xc, yc, color)
+                ox += int(self.el_step_entry.get())
+                oy += int(self.el_step_entry.get())
+        except ValueError:
+            return
+
+    def __param_e(self, ox, oy, xc, yc, color):
+        try:
+            ox = int(ox)
+            oy = int(oy)
+        except ValueError:
+            return
+
+        m = max(ox, oy)
+        l = round(pi/2*m)
+
+        for i in range(0, l+1, 1):
+            fi = i/m
+
+            x = round(ox*cos(fi))
+            y = round(oy*sin(fi))
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+    def __canon_e(self, ox, oy, xc, yc, color):
+        try:
+            ox = int(ox)
+            oy = int(oy)
+        except ValueError:
+            return
+
+        for x in range(0, ox + 1, 1):
+            y = round(oy * sqrt(1.0 - x ** 2 / ox / ox))
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+        for y in range(0, oy + 1, 1):
+            x = round(ox * sqrt(1.0 - y ** 2 / oy / oy))
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+    def __mid_p_e(self, ox, oy, xc, yc, color):
+        try:
+            ox = int(ox)
+            oy = int(oy)
+        except ValueError:
+            return
+
+        x = 0
+        y = oy
+        p = oy*oy - ox*ox*oy + 0.25*ox*ox
+        while 2*(oy*oy)*x < 2*ox*ox*y:
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+            x += 1
+
+            if p < 0:
+                p += 2*oy*oy*x + oy*oy
+            else:
+                y -= 1
+                p += 2*oy*oy*x - 2*ox*ox*y + oy*oy
+
+        p = oy*oy*(x+0.5)*(x+0.5) + ox*ox*(y-1)*(y-1) - ox*ox*oy*oy
+
+        while y >= 0:
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+            y -= 1
+
+            if p > 0:
+                p -= 2*ox*ox*y + ox*ox
+            else:
+                x += 1
+                p += 2*oy*oy*x - 2*ox*ox*y + ox*ox
+
+    def __brez_e(self, ox, oy, xc, yc, color):
+        try:
+            a = int(ox)*int(ox)
+            b = int(oy)
+        except ValueError:
+            return
+
+        x = 0
+        y = b
+
+        d = round(b * b / 2 - a * b * 2 + a / 2)
+        b = b ** 2
+
+        while y >= 0:
+
+            self.canvas.create_oval(xc+x, yc+y, xc+x, yc+y, outline=color)
+            self.canvas.create_oval(xc-x, yc+y, xc-x, yc+y, outline=color)
+            self.canvas.create_oval(xc+x, yc-y, xc+x, yc-y, outline=color)
+            self.canvas.create_oval(xc-x, yc-y, xc-x, yc-y, outline=color)
+
+            if d < 0:
+                buf = 2*d + 2*a*y - a
+                x += 1
+                if buf <= 0:
+                    d = d + 2*b*x + b
+                else:
+                    y -= 1
+                    d = d + 2*b*x - 2*a*y + a + b
+
+            elif d > 0:
+                buf = 2*d - 2*b*x - b
+                y -= 1
+
+                if buf > 0:
+                    d = d - 2*y*a + a
+                else:
+                    x += 1
+                    d = d + 2*x*b - 2*y*a + a + b
+
+            else:
+                x += 1
+                y -= 1
+                d = d + 2*x*b - 2*y*a + a + b
 # ------------------------------------
 
     def __clear(self):
