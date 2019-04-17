@@ -1,5 +1,7 @@
 from lab_01 import *
 from math import pow, exp, log
+from time import time
+from numpy.linalg import solve
 
 
 Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000,  20000,  22000,  24000,  26000],
@@ -11,7 +13,7 @@ Q_data = [[2000,   4000,   6000,   8000,   10000,  12000,  14000,  16000,  18000
 
 P_mind = 0
 P_maxd = 20
-Eps = 1e-1
+Eps = 1e-12
 
 Z_c = [0, 1, 2, 3, 4]
 E_c = [12.13, 20.98, 31.00, 45.00]
@@ -49,7 +51,7 @@ def interpolate_2_lists(x, n, list1, list2):
 
 
 def integrate(st, end, function):
-    step = 0.01
+    step = 0.05
     result = 0
 
     while st <= end:
@@ -75,7 +77,7 @@ def find_d_e(T, gamma):
 
     for i in range(4):
         d_e_i = 8.61*pow(10, -5)*T*log((1 + Z_c[i+1]*Z_c[i+1]*gamma/2) * (1+gamma/2) /
-                     (1+Z_c[i]*Z_c[i]*gamma/2))
+                (1+Z_c[i]*Z_c[i]*gamma/2))
 
         d_e.append(d_e_i)
 
@@ -89,7 +91,7 @@ def find_K(T, d_e):
         Q_ip1 = interpolate_2_lists(T, 4, Q_data[0], Q_data[i+2])
         Q_i = interpolate_2_lists(T, 4, Q_data[0], Q_data[i+1])
 
-        K_i = 2*2.415*pow(10, -3) * (Q_ip1/Q_i) * pow(T, 3/2) * exp(-E_c[i]+d_e[i])*11603/T
+        K_i = 2*2.415*pow(10, -3) * (Q_ip1/Q_i) * pow(T, 3/2) * exp(-(E_c[i]-d_e[i])*11603/T)
 
         K.append(K_i)
 
@@ -97,9 +99,9 @@ def find_K(T, d_e):
 
 
 def gamma_func(gamma, T, X):
-    right_part = X[0]/(1+gamma/2)
+    right_part = exp(X[0])/(1+gamma/2)
 
-    for i in range(2, 6):
+    for i in range(1, 6):
         right_part += ((exp(X[i])*Z_c[i-1]*Z_c[i-1]) /
                        (1+Z_c[i-1]*Z_c[i-1]*gamma/2))
 
@@ -128,8 +130,9 @@ def find_max_increment(X, d_X):
     return max_inc
 
 
-def Nt(T, P):
-    X = [-1, 3, -1, -20, -20, -20]
+def Nt(T, P, X):
+    # X = [-1, 3, -1, -20, -20, -20]
+    # X = [10, 10, 10, -1, -1, -1]
 
     while True:
         gamma = find_gamma(0, 3, T, X)
@@ -153,38 +156,51 @@ def Nt(T, P):
                               Z_c[1]*exp(X[2])+Z_c[2]*exp(X[3])+Z_c[3]*exp(X[4])+Z_c[4]*exp(X[5])-exp(X[0])]
 
         d_X = solve_lin_system_gauss(lin_sys_left_side, lin_sys_right_side)
+        # d_X = solve(lin_sys_left_side, lin_sys_right_side) # ~30% быстрее
 
         if find_max_increment(X, d_X) < Eps:
             break
 
         for i in range(len(X)):
             X[i] += d_X[i]
-
+    # print([exp(i) for i in X], gamma)
     return sum([exp(i) for i in X])
 
 
 def main():
     P_max = P_maxd
     P_min = P_mind
+    X = [-1, 3, -1, -20, -20, -20]
 
     P0 = float(input("P0: "))
     T0 = float(input("T0: "))
     Tw = float(input("Tw: "))
     m = float(input("m: "))
 
-    while abs(P_max - P_min)  > Eps:
+    bef = time()
+
+    while abs(P_max - P_min) > Eps:
         curr_p = abs(P_max-P_min)/2.0
-        curr_p+=P_min
+        curr_p += P_min
 
-        integral_value = integrate(0, 1, lambda z: Nt(t(z, T0, Tw, m), curr_p)*z)
+        integral_value = integrate(0, 1, lambda z: Nt(t(z, T0, Tw, m), curr_p, X)*z)
 
-        if (approximated_Nt(T0, P0)-2*integral_value) >= 0:
+        if (approximated_Nt(293, P0)-2*integral_value) >= 0:
             P_min = curr_p
         else:
             P_max = curr_p
 
     print("Result: ", P_max)
 
+    af = time()
 
-if __name__=='__main__':
+    print("Time req: ", af - bef)
+
+    # # print(t(0, T0, Tw, m))
+    # for i in range(1000, 10001, 1000):
+    #     Nt(t(0, i, Tw, m), 5)
+    #     print(t(0, i, Tw, m))
+
+
+if __name__ == '__main__':
     main()
