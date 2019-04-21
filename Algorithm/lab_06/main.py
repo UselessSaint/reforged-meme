@@ -1,5 +1,5 @@
 import numpy as np
-from math import cos
+from math import cos, sqrt, pow, log
 
 
 def f(x):
@@ -89,16 +89,38 @@ def find_third_column(x, y):
     return result
 
 
+def find_fifth_column(x, y):
+    # eta = [1/(1/i - 2) for i in y]
+    # ksi = [i for i in x]
+
+    eta = [log(i) for i in y]
+    ksi = [log(i) for i in x]
+
+    result = list()
+
+    for i in range(len(x)-1):
+        result.append((eta[i+1]-eta[i]) /
+                      (ksi[i+1]-ksi[i]))
+
+    # result = [(1-2*y[i])**2*result[i] for i in range(len(result))]
+    result = [y[i]/x[i] * result[i] for i in range(len(result))]
+
+    result.append("---")
+
+    return result
+
+
 def main():
-    x = np.arange(0, 12, 1)
+    x = np.arange(1, 12, 1)
     y = [f(i) for i in x]
 
     first = find_first_column(x, y)
     second = find_second_column(x, y)
     third = find_third_column(x, y)
     fourth = find_fourth_column(x, y)
+    fifth = find_fifth_column(x, y)
 
-    load_data_into_file([x, y, first, second, third, fourth])
+    load_data_into_file([x, y, first, second, third, fourth, fifth])
 
 
 if __name__ == '__main__':
