@@ -299,10 +299,18 @@ class GUI(Tk):
 
             xc, yc = self.canvas_size/2, self.canvas_size/2
 
+            dx = 1.0
+            dy = 1.0
+
+            if ox > oy:
+                dx = ox/oy
+            else:
+                dy = oy/ox
+
             while (ox < self.canvas_size/2) and (oy < self.canvas_size/2):
                 method(ox, oy, xc, yc, color)
-                ox += int(self.el_step_entry.get())
-                oy += int(self.el_step_entry.get())
+                ox += dx * int(self.el_step_entry.get())
+                oy += dy * int(self.el_step_entry.get())
         except ValueError:
             return
 
