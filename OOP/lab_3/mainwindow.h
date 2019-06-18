@@ -13,13 +13,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:
     void change_note_text(QString text);
 
 private slots:
+    void set_note_text(QString text);
     void on_button_cabin_1_clicked();
     void on_button_cabin_2_clicked();
     void on_button_cabin_3_clicked();
@@ -40,7 +41,7 @@ private slots:
     void on_button_floor_8_clicked();
     void on_button_floor_9_clicked();
     void on_button_floor_10_clicked();
-    void set_note_text(QString text);
+
 
 private:
     Ui::MainWindow *ui;

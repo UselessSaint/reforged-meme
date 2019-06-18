@@ -12,7 +12,7 @@ Lift_doors::Lift_doors(QObject *parent) : QObject(parent)
 
     QObject::connect(&doors_open_timer, SIGNAL(timeout()), this, SLOT(open()));
     QObject::connect(&doors_close_timer, SIGNAL(timeout()), this, SLOT(close()));
-    QObject::connect(this, SIGNAL(opened_doors()), &doors_stay_open_timer, SLOT(start()));
+    //QObject::connect(this, SIGNAL(opened_doors()), &doors_stay_open_timer, SLOT(start()));
     QObject::connect(&doors_stay_open_timer, SIGNAL(timeout()), this, SLOT(start_closing()));
 }
 
@@ -24,7 +24,7 @@ void Lift_doors::start_openning()
         emit change_note_text("Двери открываются.");
         doors_open_timer.start(OPENING_N_CLOSING);
     }
-    if (current_state == CLOSING)
+    else if (current_state == CLOSING)
     {
         current_state = OPENNING;
         emit change_note_text("Двери открываются.");
@@ -52,7 +52,8 @@ void Lift_doors::open()
     {
         current_state = OPENED;
         emit change_note_text("Двери открыты.");
-        emit opened_doors();
+        //emit opened_doors();
+        doors_stay_open_timer.start();
     }
 }
 

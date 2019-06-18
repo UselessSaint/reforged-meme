@@ -13,8 +13,7 @@ class Lift_cabin : public QObject
     {
         MOVING,
         GOT_TARGET,
-        WAITING_CALL,
-        WAITING_ENTRANCE
+        WAITING_CALL
     };
 
 public:

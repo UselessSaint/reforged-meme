@@ -1,6 +1,5 @@
 #include "controlpanel.h"
 
-// начальное состояние контрольной панели
 Control_panel::Control_panel(QObject *parent) : QObject(parent)
 {
     current_state = FREE;
@@ -15,8 +14,8 @@ void Control_panel::set_new_target(int floor)
 {
     current_state = BUSY;
     calls[floor - 1] = true;
-    next_target(floor); // выбор следующей цели
-    emit set_target(floor); // передача цели кабине
+    next_target(floor);
+    emit set_target(floor);
 }
 
 void Control_panel::achieved_floor(int floor)
@@ -25,9 +24,9 @@ void Control_panel::achieved_floor(int floor)
     {
         cur_floor = floor;
         cur_direction = STAY;
-        calls[floor - 1] = false; // данный этаж больше не цель
+        calls[floor - 1] = false;
 
-        if (next_target(floor)) // если существует еще какой-то вызов
+        if (next_target(floor))
         {
             emit set_target(floor);
         }
@@ -40,14 +39,12 @@ void Control_panel::achieved_floor(int floor)
 
 void Control_panel::passed_floor(int floor)
 {
-    //qDebug() << "Лифт преодолел" << floor << "этаж.";
     emit change_note_text("Лифт преодолел " + QString::number(floor) + " этаж.");
 }
 
-// выбирается следующий этаж, на который поедет лифт
 bool Control_panel::next_target(int &floor)
 {
-    int step = -1; // сначала просматриваем направление, в котором ехал лифт
+    int step = -1;
     if (cur_direction == UP)
     {
         step = 1;
@@ -56,7 +53,7 @@ bool Control_panel::next_target(int &floor)
     {
         if (calls[i - 1])
         {
-            floor = i; // выбрали этаж
+            floor = i;
             return true;
         }
     }
@@ -65,7 +62,7 @@ bool Control_panel::next_target(int &floor)
     {
         if (calls[i - 1])
         {
-            floor = i; // выбрали этаж
+            floor = i;
             return true;
         }
     }

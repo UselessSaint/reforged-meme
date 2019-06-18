@@ -1,0 +1,11 @@
+release/main.o
+release/mainwindow.o
+release/lift.o
+release/controlpanel.o
+release/doors.o
+release/cabin.o
+release/moc_mainwindow.o
+release/moc_lift.o
+release/moc_controlpanel.o
+release/moc_doors.o
+release/moc_cabin.o

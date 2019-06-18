@@ -21,7 +21,7 @@ public:
 
 signals:
     void closed_doors();
-    void opened_doors();
+    //void opened_doors();
     void change_note_text(QString text);
 
 public slots:

@@ -46,14 +46,13 @@ void Lift_cabin::cabin_moving()
     }
     else
     {
-        //qDebug() << "Лифт находится в режиме ожидания.";
         emit change_note_text("Лифт находится в режиме ожидания.");
     }
 }
 
 void Lift_cabin::cabin_stopping()
 {
-    current_state = WAITING_ENTRANCE;
+    current_state = WAITING_CALL;
     emit cabin_stopped(current_floor);
 }
 
